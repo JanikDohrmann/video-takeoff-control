@@ -1,0 +1,50 @@
+﻿<Window x:Class="video_takeoff_control.OptionsMenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:video_takeoff_control"
+        mc:Ignorable="d"
+        Title="OptionsMenuWindow" Height="450" Width="400">
+    <TabControl>
+        <TabItem Header="General">
+            <Label Content="Content goes here..." />
+        </TabItem>
+        <TabItem Header="Control Line">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Control Line Position: " Grid.Row="0" Grid.Column="0"></TextBlock>
+                <TextBox x:Name="textControlLinePosition" Grid.Row="0" Grid.Column="1" Text="50" Width="80" Height="30" TextAlignment="Center"/>
+                <Button Name="buttonChangeControlLine" Content="Save" Grid.Row="4" Width="80" Height="30" Click="ChangeControlLine_Click"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Video Storage">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Video Storage Folder Path: " Grid.Row="0" Grid.Column="0"></TextBlock>
+                <TextBox x:Name="textVideoStorageFolderPath" Grid.Row="0" Grid.Column="1" Text="50" Width="180" Height="30" TextAlignment="Center"/>
+                <Button Name="buttonSaveVideoStorage" Content="Save" Grid.Row="4" Width="80" Height="30" Click="SaveVideoStorage_Click"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
