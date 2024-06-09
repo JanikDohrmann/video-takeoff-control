@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using video_takeoff_control.video_file_handler;
@@ -67,7 +68,9 @@ namespace video_takeoff_control
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            //videoFileHandler.saveVideo(Settings.storageFolderPath, recordedVideo);
+            string competitionName = textCompetitionName.Text;
+            
+            videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList());
 
             videoSource.preview();
 
@@ -112,7 +115,7 @@ namespace video_takeoff_control
         public void newFrame(Bitmap frame)
         {
             ControlLine.drawControlLine(frame);
-            BitmapImage bitmapImage = BitmapConversions.Bitmap2BitmapImage(frame);
+            BitmapImage bitmapImage = BitmapConversions.bitmap2BitmapImage(frame);
 
             if (recording)
             {

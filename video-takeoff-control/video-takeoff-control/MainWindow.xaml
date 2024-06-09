@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:video_takeoff_control"
         mc:Ignorable="d"
         Title="Video Takeoff Control" Height="450" Width="800">
-    <DockPanel LastChildFill="False">
-        <Menu DockPanel.Dock="Top">
+    <DockPanel LastChildFill="True"  Background="LightGray">
+        <Menu DockPanel.Dock="Top" Name="menuProgram"  Background="LightGray">
             <MenuItem Header="Datei">
                 <MenuItem Header="Einstellungen" Click="openOptionsMenu_Click"/>
                 <MenuItem Header="Schließen"/>
@@ -16,32 +16,48 @@
                 <MenuItem Header="Über"/>
             </MenuItem>
         </Menu>
-        <Grid DockPanel.Dock="Bottom" Height="50">
+        <WrapPanel DockPanel.Dock="Top" Name="panelCompetitionInfo" Margin="0,10,0,0" Background="LightGray">
+            <TextBlock Text="Wettkampfname:" Margin="8,0,5,0"/>
+            <TextBox Name="textCompetitionName" Text="Wettkampfname" Width="200" Margin="5,0,5,0"/>
+        </WrapPanel>
+
+        <Grid DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="200*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="200*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Button Name="buttonBack" Content="Back" Grid.Column="0" Width="100" Height="30" Click="BackwardButton_Click"/>
-            <Button Name="buttonForward" Content="Forward" Grid.Column="1" Width="100" Height="30" Click="ForwardButton_Click"/>
-        </Grid>
-        <Image DockPanel.Dock="Left" Width="600" Height="300" Name="image"/>
-        <Grid DockPanel.Dock="Right" Height="300" Width="160">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Button Name="buttonStartRecord" Content="Start Record" Grid.Row="0" Width="80" Height="30" Click="StartButton_Click"/>
-            <Button Name="buttonStopRecord" Content="Stop Record" Grid.Row="1" Width="80" Height="30" Click="StopButton_Click"/>
-            <Button Name="buttonClear" Content="Clear" Grid.Row="2" Width="80" Height="30" Click="ClearButton_Click"/>
+            <Image Grid.Row="0" Name="image" Grid.RowSpan="2"/>
+
+            <Grid Grid.Row="2" Margin="0,10,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Name="buttonBack" Content="Back" Grid.Column="0" Width="100" Height="30" Click="BackwardButton_Click"/>
+                <Button Name="buttonForward" Content="Forward" Grid.Column="1" Width="100" Height="30" Click="ForwardButton_Click"/>
+            </Grid>
+
+            <Grid Grid.Column="1" Margin="10,0,10,0" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Name="buttonStartRecord" Content="Start Record" Grid.Row="0" Width="80" Height="30" Click="StartButton_Click" Margin="0,10,0,10"/>
+                <Button Name="buttonStopRecord" Content="Stop Record" Grid.Row="1" Width="80" Height="30" Click="StopButton_Click" Margin="0,10,0,10"/>
+                <Button Name="buttonClear" Content="Clear" Grid.Row="2" Width="80" Height="30" Click="ClearButton_Click" Margin="0,10,0,10"/>
+            </Grid>
         </Grid>
     </DockPanel>
 

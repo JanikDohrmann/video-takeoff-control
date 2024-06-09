@@ -1,17 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace video_takeoff_control
 {
@@ -23,6 +13,18 @@ namespace video_takeoff_control
         public OptionsMenuWindow()
         {
             InitializeComponent();
+
+            textControlLinePosition.Text = Settings.controlLineX.ToString();
+            textControlLineWidth.Text = Settings.controlLineWidth.ToString();
+            checkShowControlLine.IsChecked = Settings.showControlLine;
+            
+            List<String> controlLineColorOptions = new List<String>();
+            controlLineColorOptions.Add(Settings.controlLineColor.Name);
+            comboControlLineColor.ItemsSource = controlLineColorOptions;
+            comboControlLineColor.SelectedIndex = 0;
+
+            textVideoStoragePath.Text = Settings.storageFolderPath;
+            textFrameRate.Text = Settings.framerate.ToString();
         }
 
         private void ChangeControlLine_Click(object sender, RoutedEventArgs e)
@@ -31,13 +33,29 @@ namespace video_takeoff_control
 
             if (Regex.IsMatch(controlLinePosition, "\\d+"))
             {
-                Settings.controlLineX = Int32.Parse(textControlLinePosition.Text);
+                Settings.controlLineX = Int32.Parse(controlLinePosition);
             }
+
+            string controlLineWidth = textControlLineWidth.Text;
+
+            if (Regex.IsMatch(controlLineWidth, "\\d+"))
+            {
+                Settings.controlLineWidth = Int32.Parse(controlLineWidth);
+            }
+
+            Settings.showControlLine = checkShowControlLine.IsChecked.GetValueOrDefault(true);
         }
 
         private void SaveVideoStorage_Click(object sender, RoutedEventArgs e)
         {
-            Settings.storageFolderPath = textVideoStorageFolderPath.Text;
+            Settings.storageFolderPath = textVideoStoragePath.Text;
+
+            string framerate = textFrameRate.Text;
+
+            if (Regex.IsMatch(framerate, "\\d+"))
+            {
+                Settings.framerate = Int32.Parse(framerate);
+            }
         }
     }
 }

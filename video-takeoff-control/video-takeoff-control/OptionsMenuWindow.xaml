@@ -5,46 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:video_takeoff_control"
         mc:Ignorable="d"
-        Title="OptionsMenuWindow" Height="450" Width="400">
-    <TabControl>
-        <TabItem Header="General">
+        Title="Einstellungen" Height="450" Width="400"  Background="LightGray">
+    <TabControl  Background="LightGray">
+        <TabItem Header="General" IsEnabled="False">
             <Label Content="Content goes here..." />
         </TabItem>
-        <TabItem Header="Control Line">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="Control Line Position: " Grid.Row="0" Grid.Column="0"></TextBlock>
-                <TextBox x:Name="textControlLinePosition" Grid.Row="0" Grid.Column="1" Text="50" Width="80" Height="30" TextAlignment="Center"/>
-                <Button Name="buttonChangeControlLine" Content="Save" Grid.Row="4" Width="80" Height="30" Click="ChangeControlLine_Click"/>
-            </Grid>
+        <TabItem Header="Control Line" Selector.IsSelected="True">
+            <DockPanel LastChildFill="False">
+                <StackPanel DockPanel.Dock="Top" >
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="Control Line Position: " Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox x:Name="textControlLinePosition" Width="60" TextAlignment="Center"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="Control Line Width: " Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox x:Name="textControlLineWidth" Width="60" TextAlignment="Center"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="Show Control Line: " Margin="0,0,10,0" Width="200"></TextBlock>
+                        <CheckBox Name="checkShowControlLine"></CheckBox>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="Control Line Color: " Margin="0,0,10,0" Width="200"></TextBlock>
+                        <ComboBox Name="comboControlLineColor" Width="100" IsEnabled="False"></ComboBox>
+                    </WrapPanel>
+                </StackPanel>
+                <Button DockPanel.Dock="Bottom" Name="buttonChangeControlLine" Content="Save" Width="50" Click="ChangeControlLine_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
+            </DockPanel>
+            
         </TabItem>
         <TabItem Header="Video Storage">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="Video Storage Folder Path: " Grid.Row="0" Grid.Column="0"></TextBlock>
-                <TextBox x:Name="textVideoStorageFolderPath" Grid.Row="0" Grid.Column="1" Text="50" Width="180" Height="30" TextAlignment="Center"/>
-                <Button Name="buttonSaveVideoStorage" Content="Save" Grid.Row="4" Width="80" Height="30" Click="SaveVideoStorage_Click"/>
-            </Grid>
+            <DockPanel LastChildFill="False">
+                <StackPanel DockPanel.Dock="Top" >
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="Video Storage Path:" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox Name="textVideoStoragePath" Width="150" TextAlignment="Center"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="Framerate:" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox Name="textFrameRate" Width="60" TextAlignment="Center"/>
+                    </WrapPanel>
+                </StackPanel>
+                <Button DockPanel.Dock="Bottom" Name="buttonSaveVideoStorageSettings" Content="Save" Width="50" Click="SaveVideoStorage_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
+            </DockPanel>
         </TabItem>
     </TabControl>
 </Window>

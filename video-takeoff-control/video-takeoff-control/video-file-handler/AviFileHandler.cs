@@ -1,29 +1,40 @@
-﻿using SharpAvi.Codecs;
+﻿using System;
+using SharpAvi.Codecs;
 using SharpAvi.Output;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace video_takeoff_control.video_file_handler
 {
     internal class AviFileHandler : IVideoFileHandler
     {
-        public void saveVideo(string filePath, List<Bitmap> frames)
+        public void saveVideo(string filename, List<Bitmap> frames)
         {
-            AviWriter aviWriter = new AviWriter("test.avi")
+            try
             {
-                FramesPerSecond = 10,
-                EmitIndex1 = true,
-            };
+                 AviWriter aviWriter = new AviWriter(filename)
+                {
+                    FramesPerSecond = Settings.framerate,
+                    EmitIndex1 = true,
+                };
 
-            IAviVideoStream videoStream = aviWriter.AddMpeg4VcmVideoStream(400, 400, 10);
+                int width = frames[0].Width;
+                int height = frames[0].Height;
 
-            /*foreach (BitmapImage frame in frames)
+                IAviVideoStream videoStream = aviWriter.AddMJpegWpfVideoStream(width, height);
+
+                foreach (Bitmap frame in frames)
+                {
+                    videoStream.WriteFrame(true, BitmapConversions.bitmapToByte(frame, width, height));
+                }
+
+                aviWriter.Close();
+            }
+            catch (Exception e)
             {
-                videoStream.WriteFrame(true, ConvertBitmapToReadOnlySpan(BitmapImage2Bitmap(frame)));
-            }*/
-
-            aviWriter.Close();
+                File.WriteAllText("Log.txt", e.ToString());
+            }         
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace video_takeoff_control
 {
@@ -16,6 +12,7 @@ namespace video_takeoff_control
 
         //Video Storage
         public static string storageFolderPath;
+        public static int framerate;
 
         public static void initializeSettings()
         {
@@ -25,6 +22,7 @@ namespace video_takeoff_control
             showControlLine = true;
 
             storageFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control");
+            framerate = 30;
         }
     }
 }
