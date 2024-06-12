@@ -124,5 +124,18 @@ namespace video_takeoff_control
 
             Dispatcher.BeginInvoke(new Action(() => image.Source = bitmapImage));
         }
+
+        private void openAboutWindow_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow aboutWindow = new AboutWindow();
+            childWindows.Add(aboutWindow);
+            aboutWindow.Show();
+        }
+
+        private void close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        
     }
 }

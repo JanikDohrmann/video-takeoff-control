@@ -1,0 +1,15 @@
+﻿<Window x:Class="video_takeoff_control.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:video_takeoff_control"
+        mc:Ignorable="d"
+        Title="About Video Takeoff Control" Height="200" Width="400" Background="LightGray">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+            <TextBlock Text="Video Takeoff Control"/>
+            <TextBlock Text="Version 0.0.1"/>
+        </StackPanel>
+    </DockPanel>
+</Window>
