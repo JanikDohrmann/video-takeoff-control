@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using video_takeoff_control.bitmap_tools;
 using video_takeoff_control.video_file_handler;
 using video_takeoff_control.video_source;
 
@@ -115,6 +116,7 @@ namespace video_takeoff_control
         public void newFrame(Bitmap frame)
         {
             ControlLine.drawControlLine(frame);
+            BitmapTools.addMetadata(frame);
             BitmapImage bitmapImage = BitmapConversions.bitmap2BitmapImage(frame);
 
             if (recording)
