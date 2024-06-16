@@ -1,4 +1,5 @@
 ﻿using System;
+using video_takeoff_control.logging;
 
 namespace video_takeoff_control
 {
@@ -23,6 +24,7 @@ namespace video_takeoff_control
 
             storageFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control");
             framerate = 30;
+            MainWindow.GetLogger().Log(LogLevel.Information, "Setting initialized!");
         }
     }
 }

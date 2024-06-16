@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using video_takeoff_control.bitmap_tools;
+using video_takeoff_control.logging;
 using video_takeoff_control.video_file_handler;
 using video_takeoff_control.video_source;
 
@@ -25,8 +27,16 @@ namespace video_takeoff_control
         private IVideoSource videoSource;
         private IVideoFileHandler videoFileHandler;
 
+        private static ILogger logger;
+
         public MainWindow()
         {
+            string commonApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            string logpath = Path.Combine(commonApplicationDataFolder, "videoo-takeoff-control\\logs\\");
+            logger = FileLogger.create(logpath);
+
+            logger.Log(LogLevel.Information, "Starting!");
+
             Settings.initializeSettings();
 
             InitializeComponent();
@@ -36,6 +46,7 @@ namespace video_takeoff_control
 
             videoSource = new WebcamSource(this);
             videoSource.preview();
+            MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
 
             videoFileHandler = new AviFileHandler();
 
@@ -103,6 +114,8 @@ namespace video_takeoff_control
                 window.Close();
             }
 
+            logger.Log(LogLevel.Information, "Shutting down!");
+
             base.OnClosed(e);
         }
 
@@ -138,6 +151,15 @@ namespace video_takeoff_control
         {
             this.Close();
         }
-        
+
+        public static ILogger GetLogger()
+        {
+            if(logger == null)
+            {
+                logger = FileLogger.create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "\\videoo-takeoff-control\\logs\\"));
+            }
+
+            return logger;
+        }
     }
 }

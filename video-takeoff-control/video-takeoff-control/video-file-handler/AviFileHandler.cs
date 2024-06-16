@@ -4,6 +4,7 @@ using SharpAvi.Output;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using video_takeoff_control.logging;
 
 namespace video_takeoff_control.video_file_handler
 {
@@ -30,10 +31,11 @@ namespace video_takeoff_control.video_file_handler
                 }
 
                 aviWriter.Close();
+                MainWindow.GetLogger().Log(LogLevel.Information, "Video written");
             }
             catch (Exception e)
             {
-                File.WriteAllText("Log.txt", e.ToString());
+                MainWindow.GetLogger().Log(LogLevel.Error, e.ToString());
             }         
         }
     }
