@@ -1,5 +1,7 @@
 name: Build and Attach Installer
 
+
+
 on:
 #  release:
 #    types: [created]
@@ -10,7 +12,7 @@ on:
         - workflow
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: self-hosted
 
     steps:
     - name: Checkout
