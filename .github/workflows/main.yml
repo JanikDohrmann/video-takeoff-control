@@ -24,7 +24,7 @@ jobs:
         dotnet-version: '6.x' # Specify your .NET version here
 
     - name: Restore dependencies
-      run: dotnet restore video-takeoff-control.sln
+      run: dotnet restore D:\a\video-takeoff-control\video-takeoff-control\video-takeoff-control.sln
 
     - name: Build solution
       run: dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.sln --configuration Release
