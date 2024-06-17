@@ -1,0 +1,50 @@
+name: Build and Attach Installer
+
+on:
+#  release:
+#    types: [created]
+#    branches:
+#      - main
+    push:
+      branches:
+        - main
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        path: video-takeoff-control
+
+    - name: Set up .NET Core SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.x' # Specify your .NET version here
+
+    - name: Restore dependencies
+      run: dotnet restore video-takeoff-control/video-takeoff-control/video-takeoff-control.sln
+      working-directory: video-takeoff-control
+
+    - name: Build solution
+      run: dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.sln --configuration Release
+      working-directory: video-takeoff-control
+
+    - name: Publish Installer Project
+      run: dotnet publish video-takeoff-control/video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.csproj --configuration Release --output ./output
+      working-directory: video-takeoff-control
+
+    - name: Create release asset
+      run: |
+        cd ./video-takeoff-control/output
+        zip -r ../installer.zip ./
+      working-directory: video-takeoff-control
+
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./video-takeoff-control/installer.zip
+        asset_name: installer.zip
+        asset_content_type: application/zip
