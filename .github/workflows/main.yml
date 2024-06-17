@@ -1,11 +1,14 @@
 name: Build and Attach Installer
 
 on:
-  release:
-    types: [created]
-    branches:
-      - main
-
+#  release:
+#    types: [created]
+#    branches:
+#      - main
+    
+    push:
+      branches:
+        - main
 jobs:
   build:
     runs-on: windows-latest
@@ -21,12 +24,13 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: /video-takeoff-control
 
     - name: Build solution
       run: dotnet build --configuration Release
 
     - name: Publish Installer Project
-      run: dotnet publish video-takeoff-control-setup\video-takeoff-control-setup.vdproj --configuration Release --output ./output
+      run: dotnet publish video-takeoff-control-setup/video-takeoff-control-setup.vdproj --configuration Release --output ./output
 
     - name: Create release asset
       run: |
