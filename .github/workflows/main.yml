@@ -29,11 +29,10 @@ jobs:
       run: dotnet restore video-takeoff-control/video-takeoff-control.sln
 
     - name: Build solution
-      run: dotnet build --configuration Release
+      run: dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.sln --configuration Release
 
     - name: Publish Installer Project
-      run: dotnet publish video-takeoff-control/video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.csproj --configuration Release --output ./output
-      working-directory: video-takeoff-control
+      run: dotnet publish video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.csproj --configuration Release --output ./output
 
     - name: Create release asset
       run: |
