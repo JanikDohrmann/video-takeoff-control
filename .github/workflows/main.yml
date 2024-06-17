@@ -1,11 +1,13 @@
 name: Build and Attach Installer
 
 on:
-  release:
-    types: [created]
-    branches:
-      - main
-
+#  release:
+#    types: [created]
+#    branches:
+#      - main
+    push:
+      branches:
+        - main
 jobs:
   build:
     runs-on: windows-latest
