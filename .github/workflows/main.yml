@@ -12,7 +12,7 @@ on:
         - workflow
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: windows-latest
 
     steps:
     - name: Checkout
@@ -26,7 +26,7 @@ jobs:
         dotnet-version: '6.x' # Specify your .NET version here
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore video-takeoff-control/video-takeoff-control.sln
 
     - name: Build solution
       run: dotnet build --configuration Release
