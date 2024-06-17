@@ -13,10 +13,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v4
       with:
-        path: video-takeoff-control
+        fetch-depth: 0
 
     - name: Set up .NET Core SDK
       uses: actions/setup-dotnet@v3
@@ -25,7 +25,6 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore video-takeoff-control.sln
-      working-directory: video-takeoff-control
 
     - name: Build solution
       run: dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.sln --configuration Release
