@@ -7,7 +7,7 @@ on:
 #      - main
     push:
       branches:
-        - main
+        - workflow
 jobs:
   build:
     runs-on: windows-latest
@@ -24,7 +24,7 @@ jobs:
         dotnet-version: '6.x' # Specify your .NET version here
 
     - name: Restore dependencies
-      run: dotnet restore video-takeoff-control/video-takeoff-control/video-takeoff-control.sln
+      run: dotnet restore video-takeoff-control.sln
       working-directory: video-takeoff-control
 
     - name: Build solution
