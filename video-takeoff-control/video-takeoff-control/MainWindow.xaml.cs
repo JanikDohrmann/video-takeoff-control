@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -83,7 +84,7 @@ namespace video_takeoff_control
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {   
-            videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, Settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList());
+            Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, Settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList()));
             resetFrameProgress();
             videoSource.preview();
 
