@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using video_takeoff_control.bitmap_tools;
 using video_takeoff_control.logging;
@@ -62,6 +63,7 @@ namespace video_takeoff_control
             frameCounter = 0;
             recording = true;
             buttonStopRecord.IsEnabled = true;
+            buttonStopRecord.IsDefault = true;
             buttonStartRecord.IsEnabled = false;
         }
 
@@ -71,11 +73,12 @@ namespace video_takeoff_control
 
             videoSource.stopRecording();
             frameCounter = recordedVideo.Count - 1;
-
+            updateFrameProgress();
             buttonBack.IsEnabled = true;
             buttonForward.IsEnabled = true;
             buttonStopRecord.IsEnabled = false;
             buttonClear.IsEnabled = true;
+            buttonClear.IsDefault = true;
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -83,7 +86,7 @@ namespace video_takeoff_control
             string competitionName = textCompetitionName.Text;
             
             videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList());
-
+            resetFrameProgress();
             videoSource.preview();
 
             buttonBack.IsEnabled = false;
@@ -91,18 +94,37 @@ namespace video_takeoff_control
             buttonStopRecord.IsEnabled = false;
             buttonClear.IsEnabled = false;
             buttonStartRecord.IsEnabled = true;
+            buttonStartRecord.IsDefault= true;
         }
 
         private void ForwardButton_Click(object sender, RoutedEventArgs e)
         {
             int newFrameCounter = frameCounter < recordedVideo.Count - 1 ? frameCounter++ : recordedVideo.Count - 1;
+            updateFrameProgress();
             Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[newFrameCounter]));
+            
         }
 
         private void BackwardButton_Click(object sender, RoutedEventArgs e)
         {
             int newFrameCounter = frameCounter > 0 ? frameCounter-- : 0;
+            updateFrameProgress();
             Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[newFrameCounter]));
+            
+        }
+
+        private void updateFrameProgress()
+        {
+            int maxFrames = recordedVideo.Count - 1;
+
+            double progress = ((double)frameCounter / maxFrames) * 100;
+
+            framePogress.Value = progress;
+        }
+
+        private void resetFrameProgress()
+        {
+            framePogress.Value = 0;
         }
 
         protected override void OnClosed(EventArgs e)
@@ -160,6 +182,27 @@ namespace video_takeoff_control
             }
 
             return logger;
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            int newFrameCounter = frameCounter;
+
+            switch (e.Key)
+            {
+                case Key.Left:
+                    newFrameCounter = frameCounter > 0 ? frameCounter-- : 0;
+                    Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[newFrameCounter]));
+                    updateFrameProgress();
+                    break;
+                case Key.Right:
+                    newFrameCounter = frameCounter < recordedVideo.Count - 1 ? frameCounter++ : recordedVideo.Count - 1;
+                    Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[newFrameCounter]));
+                    updateFrameProgress();
+                    break;
+            }
         }
     }
 }

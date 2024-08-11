@@ -29,9 +29,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="200*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Image Grid.Row="0" Name="image" Grid.RowSpan="2"/>
+            <Image Grid.Row="0" Name="image" Grid.RowSpan="1"/>
+
+            <ProgressBar Grid.Row="1" Height="20" Name="framePogress" Minimum="0" Maximum="100" Margin="0,10,0,10"></ProgressBar>
 
             <Grid Grid.Row="2" Margin="0,10,0,10">
                 <Grid.ColumnDefinitions>
@@ -42,7 +44,8 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Button Name="buttonBack" Content="Back" Grid.Column="0" Width="100" Height="30" Click="BackwardButton_Click"/>
-                <Button Name="buttonForward" Content="Forward" Grid.Column="1" Width="100" Height="30" Click="ForwardButton_Click"/>
+                <Button Name="buttonForward" Content="Forward" Grid.Column="1" Width="100" Height="30" Click="ForwardButton_Click">
+                </Button>
             </Grid>
 
             <Grid Grid.Column="1" Margin="10,0,10,0" VerticalAlignment="Top">
@@ -54,7 +57,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button Name="buttonStartRecord" Content="Start Record" Grid.Row="0" Width="80" Height="30" Click="StartButton_Click" Margin="0,10,0,10"/>
+                <Button Name="buttonStartRecord" Content="Start Record" Grid.Row="0" Width="80" Height="30" Click="StartButton_Click" Margin="0,10,0,10" IsDefault="True"/>
                 <Button Name="buttonStopRecord" Content="Stop Record" Grid.Row="1" Width="80" Height="30" Click="StopButton_Click" Margin="0,10,0,10"/>
                 <Button Name="buttonClear" Content="Clear" Grid.Row="2" Width="80" Height="30" Click="ClearButton_Click" Margin="0,10,0,10"/>
             </Grid>
