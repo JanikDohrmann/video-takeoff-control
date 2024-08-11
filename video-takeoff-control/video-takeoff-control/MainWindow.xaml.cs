@@ -82,10 +82,8 @@ namespace video_takeoff_control
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
-        {
-            string competitionName = textCompetitionName.Text;
-            
-            videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList());
+        {   
+            videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, Settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList());
             resetFrameProgress();
             videoSource.preview();
 
@@ -203,6 +201,19 @@ namespace video_takeoff_control
                     updateFrameProgress();
                     break;
             }
+        }
+
+        private void openCompetitionModal_Click(object sender, RoutedEventArgs e)
+        {
+            CompetitionNameModal competitionNameModal = new CompetitionNameModal();
+            childWindows.Add(competitionNameModal);
+            competitionNameModal.mainWindow = this;
+            competitionNameModal.Show();
+        }
+
+        public void updateCompetitionName()
+        {
+            textCompetitionName.Text = Settings.competitionName;
         }
     }
 }

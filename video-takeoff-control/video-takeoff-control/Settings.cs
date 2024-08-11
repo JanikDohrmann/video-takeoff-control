@@ -15,6 +15,9 @@ namespace video_takeoff_control
         public static string storageFolderPath;
         public static int framerate;
 
+        //Competition
+        public static string competitionName;
+
         public static void initializeSettings()
         {
             controlLineX = 0;
@@ -25,6 +28,8 @@ namespace video_takeoff_control
             storageFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control");
             framerate = 30;
             MainWindow.GetLogger().Log(LogLevel.Information, "Setting initialized!");
+
+            competitionName = "Wettkampfname";
         }
     }
 }

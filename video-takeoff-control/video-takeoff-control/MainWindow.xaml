@@ -18,7 +18,8 @@
         </Menu>
         <WrapPanel DockPanel.Dock="Top" Name="panelCompetitionInfo" Margin="0,10,0,0" Background="LightGray">
             <TextBlock Text="Wettkampfname:" Margin="8,0,5,0"/>
-            <TextBox Name="textCompetitionName" Text="Wettkampfname" Width="200" Margin="5,0,5,0"/>
+            <TextBox Name="textCompetitionName" Text="Wettkampfname" Width="200" Margin="5,0,5,0" IsEnabled="False"/>
+            <Button x:Name="editCompetitioNameButton" Content="Edit" Click="openCompetitionModal_Click"/>
         </WrapPanel>
 
         <Grid DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Margin="0,10,0,0">
