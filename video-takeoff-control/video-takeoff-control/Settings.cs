@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using video_takeoff_control.logging;
 
 namespace video_takeoff_control
@@ -18,6 +19,14 @@ namespace video_takeoff_control
         //Competition
         public static string competitionName;
 
+        //Video Source
+        public static Dictionary<string, string> videoSourceReceiveIps;
+        public static Dictionary<string, string> videoSourceSendIps;
+        public static Dictionary<string, int> videoSourceReceivePorts;
+        public static Dictionary<string, int> videoSourceSendPorts;
+        public static Dictionary<string, int> videoSourceImageSize;
+
+        //Init
         public static void initializeSettings()
         {
             controlLineX = 0;
@@ -27,9 +36,22 @@ namespace video_takeoff_control
 
             storageFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control");
             framerate = 30;
-            MainWindow.GetLogger().Log(LogLevel.Information, "Setting initialized!");
+            
 
             competitionName = "Wettkampfname";
+
+            videoSourceSendIps = new Dictionary<string, string>();
+            videoSourceSendIps.Add("cam1", "127.0.0.1");
+            videoSourceSendPorts = new Dictionary<string, int>();
+            videoSourceSendPorts.Add("cam1", 10526);
+            videoSourceReceiveIps = new Dictionary<string, string>();
+            videoSourceReceiveIps.Add("cam1", "127.0.0.1");
+            videoSourceReceivePorts = new Dictionary<string, int>();
+            videoSourceReceivePorts.Add("cam1", 10525);
+            videoSourceImageSize = new Dictionary<string, int>();
+            videoSourceReceivePorts.Add("cam1", 10525);
+
+            MainWindow.GetLogger().Log(LogLevel.Information, "Setting initialized!");
         }
     }
 }
