@@ -39,23 +39,33 @@ namespace video_takeoff_control
 
             logger.Log(LogLevel.Information, "Starting!");
 
-            Settings.initializeSettings();
+            try
+            {
+                Settings.initializeSettings();
 
-            InitializeComponent();
-            recordedVideo = new List<BitmapImage>();
-            frameCounter = 0;
-            recording = false;
+                InitializeComponent();
+                recordedVideo = new List<BitmapImage>();
+                frameCounter = 0;
+                recording = false;
 
-            videoSource = new WebcamSource(this);
-            videoSource.preview();
-            MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
+                /*videoSource = new WebcamSource(this);
+                videoSource.preview();*/
+                videoSource = new SimpleHttpVideoSource(this, "cam1");
+                videoSource.preview();
+                MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
 
-            videoFileHandler = new AviFileHandler();
+                videoFileHandler = new AviFileHandler();
 
-            buttonBack.IsEnabled = false;
-            buttonForward.IsEnabled = false;
-            buttonStopRecord.IsEnabled = false;
-            buttonClear.IsEnabled = false;
+                buttonBack.IsEnabled = false;
+                buttonForward.IsEnabled = false;
+                buttonStopRecord.IsEnabled = false;
+                buttonClear.IsEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im MainWindow: {ex.ToString()}");
+            }
+            
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -84,16 +94,23 @@ namespace video_takeoff_control
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {   
-            Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, Settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList()));
-            resetFrameProgress();
-            videoSource.preview();
+            try
+            {
+                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, Settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList()));
+                resetFrameProgress();
+                videoSource.preview();
 
-            buttonBack.IsEnabled = false;
-            buttonForward.IsEnabled = false;
-            buttonStopRecord.IsEnabled = false;
-            buttonClear.IsEnabled = false;
-            buttonStartRecord.IsEnabled = true;
-            buttonStartRecord.IsDefault= true;
+                buttonBack.IsEnabled = false;
+                buttonForward.IsEnabled = false;
+                buttonStopRecord.IsEnabled = false;
+                buttonClear.IsEnabled = false;
+                buttonStartRecord.IsEnabled = true;
+                buttonStartRecord.IsDefault = true;
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im Clear Button: {ex.ToString()}");
+            }
         }
 
         private void ForwardButton_Click(object sender, RoutedEventArgs e)

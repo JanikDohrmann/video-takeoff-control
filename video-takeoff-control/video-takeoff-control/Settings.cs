@@ -20,11 +20,7 @@ namespace video_takeoff_control
         public static string competitionName;
 
         //Video Source
-        public static Dictionary<string, string> videoSourceReceiveIps;
-        public static Dictionary<string, string> videoSourceSendIps;
-        public static Dictionary<string, int> videoSourceReceivePorts;
-        public static Dictionary<string, int> videoSourceSendPorts;
-        public static Dictionary<string, int> videoSourceImageSize;
+        public static Dictionary<string, string> httpVideoSourceURL;
 
         //Init
         public static void initializeSettings()
@@ -40,16 +36,8 @@ namespace video_takeoff_control
 
             competitionName = "Wettkampfname";
 
-            videoSourceSendIps = new Dictionary<string, string>();
-            videoSourceSendIps.Add("cam1", "127.0.0.1");
-            videoSourceSendPorts = new Dictionary<string, int>();
-            videoSourceSendPorts.Add("cam1", 10526);
-            videoSourceReceiveIps = new Dictionary<string, string>();
-            videoSourceReceiveIps.Add("cam1", "127.0.0.1");
-            videoSourceReceivePorts = new Dictionary<string, int>();
-            videoSourceReceivePorts.Add("cam1", 10525);
-            videoSourceImageSize = new Dictionary<string, int>();
-            videoSourceReceivePorts.Add("cam1", 10525);
+            httpVideoSourceURL = new Dictionary<string, string>();
+            httpVideoSourceURL.Add("cam1", "http://10.1.1.69:8080/shot.jpg");
 
             MainWindow.GetLogger().Log(LogLevel.Information, "Setting initialized!");
         }
