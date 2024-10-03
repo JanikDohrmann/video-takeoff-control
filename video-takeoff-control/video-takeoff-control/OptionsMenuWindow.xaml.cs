@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
+using video_takeoff_control.logging;
+using video_takeoff_control.video_source;
 
 namespace video_takeoff_control
 {
@@ -10,8 +12,10 @@ namespace video_takeoff_control
     /// </summary>
     public partial class OptionsMenuWindow : Window
     {
-        public OptionsMenuWindow()
+        private MainWindow _mainWindow;
+        public OptionsMenuWindow(MainWindow mainWindow)
         {
+            _mainWindow = mainWindow;
             InitializeComponent();
 
             textControlLinePosition.Text = Settings.controlLineX.ToString();
@@ -25,6 +29,26 @@ namespace video_takeoff_control
 
             textVideoStoragePath.Text = Settings.storageFolderPath;
             textFrameRate.Text = Settings.framerate.ToString();
+
+            textHttpCameraUrl.Text = Settings.httpVideoSourceURL["cam1"];
+            comboVideoSourceType.SelectedIndex = (int) Settings.selectedVideoSourceType;
+        }
+
+        private void ChangeVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Settings.httpVideoSourceURL["cam1"] = textHttpCameraUrl.Text;
+                VideoSourceType videoSourceType = comboVideoSourceType.SelectedIndex == 0 ? VideoSourceType.Webcam : VideoSourceType.SimpleHttpCamera;
+                Settings.selectedVideoSourceType = videoSourceType;
+                MainWindow.GetLogger().Log(LogLevel.Debug, $"Video Source Type selected: {videoSourceType.ToString()}");
+                _mainWindow.setupCamera(videoSourceType);
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im ChangeVideoSource_Click Button: {ex.ToString()}");
+            }
+
         }
 
         private void ChangeControlLine_Click(object sender, RoutedEventArgs e)

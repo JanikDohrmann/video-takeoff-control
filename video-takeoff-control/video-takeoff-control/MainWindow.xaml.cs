@@ -48,10 +48,7 @@ namespace video_takeoff_control
                 frameCounter = 0;
                 recording = false;
 
-                /*videoSource = new WebcamSource(this);
-                videoSource.preview();*/
-                videoSource = new SimpleHttpVideoSource(this, "cam1");
-                videoSource.preview();
+                setupCamera(Settings.selectedVideoSourceType);
                 MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
 
                 videoFileHandler = new AviFileHandler();
@@ -159,7 +156,7 @@ namespace video_takeoff_control
 
         private void openOptionsMenu_Click(object sender, RoutedEventArgs e)
         {
-            OptionsMenuWindow optionsMenuWindow = new OptionsMenuWindow();
+            OptionsMenuWindow optionsMenuWindow = new OptionsMenuWindow(this);
             childWindows.Add(optionsMenuWindow);
             optionsMenuWindow.Show();
         }
@@ -232,6 +229,35 @@ namespace video_takeoff_control
         public void updateCompetitionName()
         {
             textCompetitionName.Text = Settings.competitionName;
+        }
+
+        public void setupCamera(VideoSourceType type)
+        {
+            try
+            {
+                if (videoSource != null)
+                {
+                    videoSource.close();
+                }
+
+                switch (type)
+                {
+                    case VideoSourceType.Webcam:
+                        videoSource = new WebcamSource(this);
+                        videoSource.preview();
+                        break;
+                    case VideoSourceType.SimpleHttpCamera:
+                        videoSource = new SimpleHttpVideoSource(this, "cam1");
+                        videoSource.preview();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im Camera Setup: {ex.ToString()}");
+            }
         }
     }
 }
