@@ -7,10 +7,25 @@
         mc:Ignorable="d"
         Title="Einstellungen" Height="450" Width="400"  Background="LightGray">
     <TabControl  Background="LightGray">
-        <TabItem Header="General" IsEnabled="False">
-            <Label Content="Content goes here..." />
+        <TabItem Header="Video Source"  Selector.IsSelected="True">
+            <DockPanel LastChildFill="False">
+                <StackPanel DockPanel.Dock="Top" >
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="Video Source Type: " Margin="0,0,10,0" Width="100"></TextBlock>
+                        <ComboBox x:Name="comboVideoSourceType" Width="200">
+                            <ComboBoxItem Content="Webcam"></ComboBoxItem>
+                            <ComboBoxItem Content="Simple HTTP-Camera"></ComboBoxItem>
+                        </ComboBox>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="HTTP Camera URL: " Margin="0,0,10,0" Width="100"></TextBlock>
+                        <TextBox x:Name="textHttpCameraUrl" Width="200" TextAlignment="Center"/>
+                    </WrapPanel>
+                </StackPanel>
+                <Button DockPanel.Dock="Bottom" Name="buttonChangeVideoSource" Content="Save" Width="50" Click="ChangeVideoSource_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
+            </DockPanel>
         </TabItem>
-        <TabItem Header="Control Line" Selector.IsSelected="True">
+        <TabItem Header="Control Line">
             <DockPanel LastChildFill="False">
                 <StackPanel DockPanel.Dock="Top" >
                     <WrapPanel Margin="0,5,0,5">
