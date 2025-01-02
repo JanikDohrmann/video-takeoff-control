@@ -10,7 +10,7 @@ on:
         - workflow
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     - name: Checkout
@@ -29,13 +29,13 @@ jobs:
     - name: Build solution
       run: dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.csproj --configuration Release
 
-    - name: Install Visual Studio Build Tools
-      run: |
-        choco install visualstudio2022-buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools --includeRecommended --quiet --norestart"
+    #- name: Install Visual Studio Build Tools
+    #  run: |
+    #    choco install visualstudio2022-buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools --includeRecommended --quiet --norestart"
 
     - name: Build Installer Project
       run: |
-        "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\devenv.com" video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.vdproj /Rebuild Release
+        devenv video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.vdproj /Rebuild Release
 
     - name: Create release asset
       run: |
