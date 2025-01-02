@@ -29,12 +29,12 @@ jobs:
     - name: Build solution
       run: dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.csproj --configuration Release
 
-    - name: Publish Installer Project
-      run: dotnet publish video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.csproj --configuration Release --output ./output
+    - name: Build Installer Project
+      run: devenv video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.vdproj \Rebuild Release
 
     - name: Create release asset
       run: |
-        cd ./video-takeoff-control/output
+        cd ./video-takeoff-control-setup/Release
         zip -r ../installer.zip ./
       working-directory: video-takeoff-control
 
