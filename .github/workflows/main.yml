@@ -27,11 +27,7 @@ jobs:
       run: dotnet restore video-takeoff-control/video-takeoff-control.sln
 
     - name: Build solution
-      run: dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.csproj --configuration Release
-
-    #- name: Install Visual Studio Build Tools
-    #  run: |
-    #    choco install visualstudio2022-buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools --includeRecommended --quiet --norestart"
+      run: msbuild video-takeoff-control\video-takeoff-control\video-takeoff-control.csproj /p:Configuration=Release /m:1 #dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.csproj --configuration Release
 
     - name: Setup VS Dev Environment
       uses: seanmiddleditch/gha-setup-vsdevenv@v4
