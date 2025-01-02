@@ -1,7 +1,5 @@
 name: Build and Attach Installer
 
-
-
 on:
 #  release:
 #    types: [created]
