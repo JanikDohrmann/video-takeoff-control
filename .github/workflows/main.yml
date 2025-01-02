@@ -1,51 +1,54 @@
-name: Build and Attach Installer
+name: Build and Release .vdproj
 
 on:
-#  release:
-#    types: [created]
-#    branches:
-#      - main
-    push:
-      branches:
+  push:
+    branches:
         - workflow
+    #tags:
+     # - 'v*'  # Der Workflow wird bei Push auf Tags wie v1.0, v2.3.4 ausgelöst
+
 jobs:
   build:
-    runs-on: windows-2022
-
+    runs-on: windows-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-    - name: Set up .NET Core SDK
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.x' # Specify your .NET version here
+    - name: Set up Visual Studio
+      uses: microsoft/setup-msbuild@v1
 
-    - name: Restore dependencies
-      run: dotnet restore video-takeoff-control/video-takeoff-control.sln
-
-    - name: Build solution
-      run: dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.csproj --configuration Release
-
-    - name: Setup VS Dev Environment
-      uses: seanmiddleditch/gha-setup-vsdevenv@v4
-
-    - name: Build Installer Project
+    - name: Build .vdproj
+      shell: cmd
       run: |
-        devenv video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.vdproj /Rebuild Release
+        setlocal
+        call "%VSINSTALLDIR%\Common7\Tools\VsDevCmd.bat"
+        devenv.exe path/to/your-project.vdproj /Rebuild Release
+        for /f "tokens=2 delims==" %%A in ('findstr "ProductVersion" path/to/AssemblyInfo.cs') do set VERSION=%%A
+        set OUTPUT_FILE=output_%VERSION%.msi
+        ren "path/to/output.msi" "%OUTPUT_FILE%"
+        echo "::set-output name=output_file::%OUTPUT_FILE%"
+      env:
+        VSINSTALLDIR: C:\Program Files (x86)\Microsoft Visual Studio\2022\Community  # Anpassen, falls andere Version
 
-    - name: Create release asset
-      run: |
-        cd ./video-takeoff-control-setup/Release
-        zip -r ../installer.zip ./
-      working-directory: video-takeoff-control
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-output
+        path: ${{ steps.build.outputs.output_file }}
 
-    - name: Upload release asset
+  release:
+    needs: build
+    runs-on: windows-latest
+    steps:
+    - name: Download Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: build-output
+
+    - name: Attach to Release
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./video-takeoff-control/installer.zip
-        asset_name: installer.zip
-        asset_content_type: application/zip
+        asset_path: build-output/${{ steps.build.outputs.output_file }}
+        asset_name: ${{ steps.build.outputs.output_file }}
+        asset_content_type: application/octet-stream
