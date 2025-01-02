@@ -35,7 +35,7 @@ jobs:
 
     - name: Build Installer Project
       run: |
-        devenv video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.vdproj /Rebuild Release
+        "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\devenv.com" video-takeoff-control/video-takeoff-control-setup/video-takeoff-control-setup.vdproj /Rebuild Release
 
     - name: Create release asset
       run: |
