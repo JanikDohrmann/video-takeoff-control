@@ -1,0 +1,28 @@
+name: Build and Test
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up .NET Core SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.x' # Specify your .NET version here
+
+    - name: Restore dependencies
+      run: dotnet restore video-takeoff-control/video-takeoff-control.sln
+
+    - name: Build solution
+      run: dotnet build video-takeoff-control/video-takeoff-control/video-takeoff-control.csproj --configuration Release
+      
+    - name: Test solution
+      run: dotnet test video-takeoff-control/video-takeoff-control.sln
+
