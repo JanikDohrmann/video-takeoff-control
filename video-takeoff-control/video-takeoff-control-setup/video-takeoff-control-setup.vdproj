@@ -31,6 +31,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -47,6 +55,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -134,15 +150,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:video-takeoff-control"
-        "ProductCode" = "8:{AE75B067-9C06-4508-A054-012D732405B7}"
-        "PackageCode" = "8:{2280E62F-DE37-4996-8D86-D1B0D4AB3B63}"
+        "ProductCode" = "8:{E0A4B160-F625-4142-B7EE-BFC0FF4DC0BE}"
+        "PackageCode" = "8:{EC8F3830-631B-4515-B98A-138B9009DB3D}"
         "UpgradeCode" = "8:{5E5454B8-2489-4DF2-9236-C0C9DE32AE68}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.0.1"
+        "ProductVersion" = "8:0.0.3"
         "Manufacturer" = "8:Janik Dohrmann"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -656,7 +672,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_78EF433F661D4BDEADDE5C982F647ABC"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\video-takeoff-control\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_8EA3D2BA19AB4AB98FC514808CC10F85"
