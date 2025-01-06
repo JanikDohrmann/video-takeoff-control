@@ -35,7 +35,7 @@ namespace video_takeoff_control.video_file_handler
             }
             catch (Exception e)
             {
-                MainWindow.GetLogger().Log(LogLevel.Error, e.ToString());
+                MainWindow.GetLogger().LogException(e);
             }         
         }
     }
