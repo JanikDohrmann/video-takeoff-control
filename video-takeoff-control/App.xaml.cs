@@ -27,10 +27,10 @@ namespace video_takeoff_control
             switch (cultureCode)
             {
                 case "de-DE":
-                    dict.Source = new Uri("resources/Strings.de-DE.xaml", UriKind.Relative);
+                    dict.Source = new Uri("resources/locals/Strings.de-DE.xaml", UriKind.Relative);
                     break;
                 default:
-                    dict.Source = new Uri("resources/Strings.xaml", UriKind.Relative);
+                    dict.Source = new Uri("resources/locals/Strings.xaml", UriKind.Relative);
                     break;
             }
 

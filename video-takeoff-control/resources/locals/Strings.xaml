@@ -30,6 +30,14 @@
     <sys:String x:Key="OptionsMenu_WindowTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Options
     </sys:String>
+
+    <sys:String x:Key="OptionsMenu_Common_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Common
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_Common_LanguageHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Language
+    </sys:String>
+
     <sys:String x:Key="OptionsMenu_VideoSorce_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         VideoSource
     </sys:String>
