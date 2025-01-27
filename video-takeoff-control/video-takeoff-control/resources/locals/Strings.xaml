@@ -1,0 +1,114 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--Common-->
+    <sys:String x:Key="Common_ApplicationTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Video Takeoff Control
+    </sys:String>
+    <sys:String x:Key="Common_Save" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Save
+    </sys:String>
+    
+    <!--Menu-->
+    <sys:String x:Key="Menu_File" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        File
+    </sys:String>
+    <sys:String x:Key="Menu_File_Options" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Options
+    </sys:String>
+    <sys:String x:Key="Menu_File_Close" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Close
+    </sys:String>
+
+    <sys:String x:Key="Menu_Help" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Help
+    </sys:String>
+    <sys:String x:Key="Menu_Help_About" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        About
+    </sys:String>
+
+    <!--Options Menu-->
+    <sys:String x:Key="OptionsMenu_WindowTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Options
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_VideoSorce_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        VideoSource
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_VideoSorce_TypeHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Video Source Type:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_VideoSorce_HttpCameraUrlHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        HTTP Camera URL:
+    </sys:String>
+    
+    <sys:String x:Key="OptionsMenu_ControlLine_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Control Line
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_PositionHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Control Line Position:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_WidthHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Control Line Width:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_ShowLineHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Show Control Line:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_ColourHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Control Line Colour:
+    </sys:String>
+
+    <sys:String x:Key="OptionsMenu_VideoStorage_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Video Storage
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_VideoStorage_PathHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Video Storage Path:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_VideoStorage_FramerateHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Framerate:
+    </sys:String>
+
+    <!--About Window-->
+    <sys:String x:Key="AboutWindow_WindowTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        About Video Takeoff Control
+    </sys:String>
+    
+    <!--Competition Details-->
+    <sys:String x:Key="CompetitionDetails_CompetitioName" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Competition name:
+    </sys:String>
+    <sys:String x:Key="CompetitionDetails_CompetitioName_DefaultText" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Competition name
+    </sys:String>
+    <sys:String x:Key="CompetitionDetails_CompetitioName_Edit" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Edit
+    </sys:String>
+
+    <!--Competition Details Change Modal-->
+    <sys:String x:Key="CompetitionDetails_Modal_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Change Competition Details
+    </sys:String>
+    <sys:String x:Key="CompetitionDetails_Modal_CompetitioName_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Competition name:
+    </sys:String>
+    <sys:String x:Key="CompetitionDetails_Modal_CompetitioName_DefaultText" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Competition name
+    </sys:String>
+
+    <!--Video Controls-->
+    <sys:String x:Key="VideoControls_StartRecording" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Start
+    </sys:String>
+    <sys:String x:Key="VideoControls_StopRecording" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Stop
+    </sys:String>
+    <sys:String x:Key="VideoControls_ClearRecording" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Reset
+    </sys:String>
+
+    <sys:String x:Key="VideoControls_MoveBack" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        ←
+    </sys:String>
+    <sys:String x:Key="VideoControls_MoveForward" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        →
+    </sys:String>
+
+</ResourceDictionary>

@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:video_takeoff_control"
         mc:Ignorable="d"
-        Title="About Video Takeoff Control" Height="200" Width="400" Background="LightGray">
+        Title="{DynamicResource AboutWindow_WindowTitle}" Height="200" Width="400" Background="LightGray">
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
-            <TextBlock Text="Video Takeoff Control"/>
+            <TextBlock Text="{DynamicResource Common_ApplicationTitle}"/>
             <TextBlock Text="Version 0.0.3"/>
         </StackPanel>
     </DockPanel>

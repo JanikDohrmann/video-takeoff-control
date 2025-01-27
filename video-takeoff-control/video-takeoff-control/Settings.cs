@@ -7,6 +7,9 @@ namespace video_takeoff_control
 {
     internal class Settings
     {
+        //UI settings
+        public static string uiCulture;
+
         //Control Line
         public static int controlLineX;
         public static int controlLineWidth;
@@ -41,6 +44,9 @@ namespace video_takeoff_control
             selectedVideoSourceType = VideoSourceType.Webcam;
             httpVideoSourceURL = new Dictionary<string, string>();
             httpVideoSourceURL.Add("cam1", "http://10.1.1.69:8080/shot.jpg");
+
+            uiCulture = "en-UK";
+            App.ChangeLanguage(uiCulture);
 
             MainWindow.GetLogger().Log(LogLevel.Information, "Setting initialized!");
         }

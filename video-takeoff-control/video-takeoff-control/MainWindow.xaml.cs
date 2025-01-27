@@ -73,6 +73,7 @@ namespace video_takeoff_control
             buttonStopRecord.IsEnabled = true;
             buttonStopRecord.IsDefault = true;
             buttonStartRecord.IsEnabled = false;
+            editCompetitioNameButton.IsEnabled = false;
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
@@ -103,6 +104,7 @@ namespace video_takeoff_control
                 buttonClear.IsEnabled = false;
                 buttonStartRecord.IsEnabled = true;
                 buttonStartRecord.IsDefault = true;
+                editCompetitioNameButton.IsEnabled = true;
             }
             catch (Exception ex)
             {
@@ -220,6 +222,7 @@ namespace video_takeoff_control
 
         private void openCompetitionModal_Click(object sender, RoutedEventArgs e)
         {
+            buttonStartRecord.Focus();
             CompetitionNameModal competitionNameModal = new CompetitionNameModal();
             childWindows.Add(competitionNameModal);
             competitionNameModal.mainWindow = this;

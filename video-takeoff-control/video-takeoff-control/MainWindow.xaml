@@ -5,21 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:video_takeoff_control"
         mc:Ignorable="d"
-        Title="Video Takeoff Control" Height="450" Width="800">
+        Title="{DynamicResource Common_ApplicationTitle}" Height="450" Width="800">
     <DockPanel LastChildFill="True"  Background="LightGray">
         <Menu DockPanel.Dock="Top" Name="menuProgram"  Background="LightGray">
-            <MenuItem Header="Datei">
-                <MenuItem Header="Einstellungen" Click="openOptionsMenu_Click"/>
-                <MenuItem Header="Schließen" Click="close_Click"/>
+            <MenuItem Header="{DynamicResource Menu_File}">
+                <MenuItem Header="{DynamicResource Menu_File_Options}" Click="openOptionsMenu_Click"/>
+                <MenuItem Header="{DynamicResource Menu_File_Close}" Click="close_Click"/>
             </MenuItem>
-            <MenuItem Header="Hilfe">
-                <MenuItem Header="Über" Click="openAboutWindow_Click"/>
+            <MenuItem Header="{DynamicResource Menu_Help}">
+                <MenuItem Header="{DynamicResource Menu_Help_About}" Click="openAboutWindow_Click"/>
             </MenuItem>
         </Menu>
         <WrapPanel DockPanel.Dock="Top" Name="panelCompetitionInfo" Margin="0,10,0,0" Background="LightGray">
-            <TextBlock Text="Wettkampfname:" Margin="8,0,5,0"/>
-            <TextBox Name="textCompetitionName" Text="Wettkampfname" Width="200" Margin="5,0,5,0" IsEnabled="False"/>
-            <Button x:Name="editCompetitioNameButton" Content="Edit" Click="openCompetitionModal_Click"/>
+            <TextBlock Text="{DynamicResource CompetitionDetails_CompetitioName}" Margin="8,0,5,0"/>
+            <TextBox Name="textCompetitionName" Text="{DynamicResource CompetitionDetails_CompetitioName_DefaultText}" Width="200" Margin="5,0,5,0" IsEnabled="False"/>
+            <Button x:Name="editCompetitioNameButton" Content="{DynamicResource CompetitionDetails_CompetitioName_Edit}" Click="openCompetitionModal_Click"/>
         </WrapPanel>
 
         <Grid DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Margin="0,10,0,0">
@@ -44,8 +44,8 @@
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button Name="buttonBack" Content="Back" Grid.Column="0" Width="100" Height="30" Click="BackwardButton_Click"/>
-                <Button Name="buttonForward" Content="Forward" Grid.Column="1" Width="100" Height="30" Click="ForwardButton_Click">
+                <Button Name="buttonBack" Content="{DynamicResource VideoControls_MoveBack}" Grid.Column="0" Width="100" Height="30" Click="BackwardButton_Click"/>
+                <Button Name="buttonForward" Content="{DynamicResource VideoControls_MoveForward}" Grid.Column="1" Width="100" Height="30" Click="ForwardButton_Click">
                 </Button>
             </Grid>
 
@@ -58,9 +58,9 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button Name="buttonStartRecord" Content="Start Record" Grid.Row="0" Width="80" Height="30" Click="StartButton_Click" Margin="0,10,0,10" IsDefault="True"/>
-                <Button Name="buttonStopRecord" Content="Stop Record" Grid.Row="1" Width="80" Height="30" Click="StopButton_Click" Margin="0,10,0,10"/>
-                <Button Name="buttonClear" Content="Clear" Grid.Row="2" Width="80" Height="30" Click="ClearButton_Click" Margin="0,10,0,10"/>
+                <Button Name="buttonStartRecord" Content="{DynamicResource VideoControls_StartRecording}" Grid.Row="0" Width="80" Height="30" Click="StartButton_Click" Margin="0,10,0,10" IsDefault="True"/>
+                <Button Name="buttonStopRecord" Content="{DynamicResource VideoControls_StopRecording}" Grid.Row="1" Width="80" Height="30" Click="StopButton_Click" Margin="0,10,0,10"/>
+                <Button Name="buttonClear" Content="{DynamicResource VideoControls_ClearRecording}" Grid.Row="2" Width="80" Height="30" Click="ClearButton_Click" Margin="0,10,0,10"/>
             </Grid>
         </Grid>
     </DockPanel>
