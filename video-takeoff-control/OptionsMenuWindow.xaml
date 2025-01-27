@@ -1,0 +1,82 @@
+﻿<Window x:Class="video_takeoff_control.OptionsMenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:video_takeoff_control"
+        mc:Ignorable="d"
+        Title="{DynamicResource OptionsMenu_WindowTitle}" Height="450" Width="400"  Background="LightGray">
+    <TabControl  Background="LightGray">
+        <TabItem Header="{DynamicResource OptionsMenu_Common_Header}"  Selector.IsSelected="True">
+            <DockPanel LastChildFill="False">
+                <StackPanel DockPanel.Dock="Top" >
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_Common_LanguageHeader}" Margin="0,0,10,0" Width="100"></TextBlock>
+                        <ComboBox x:Name="comboLanguage" Width="200" SelectedValuePath="Content">
+                            <ComboBoxItem Content="en-UK"></ComboBoxItem>
+                            <ComboBoxItem Content="de-DE"></ComboBoxItem>
+                        </ComboBox>
+                    </WrapPanel>
+                </StackPanel>
+                <Button DockPanel.Dock="Bottom" Name="buttonChangeCommon" Content="{DynamicResource Common_Save}" Width="50" Click="ChangeCommon_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
+            </DockPanel>
+        </TabItem>
+        <TabItem Header="{DynamicResource OptionsMenu_VideoSorce_Header}"  Selector.IsSelected="True">
+            <DockPanel LastChildFill="False">
+                <StackPanel DockPanel.Dock="Top" >
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_TypeHeader}" Margin="0,0,10,0" Width="100"></TextBlock>
+                        <ComboBox x:Name="comboVideoSourceType" Width="200">
+                            <ComboBoxItem Content="Webcam"></ComboBoxItem>
+                            <ComboBoxItem Content="Simple HTTP-Camera"></ComboBoxItem>
+                        </ComboBox>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_HttpCameraUrlHeader}" Margin="0,0,10,0" Width="100"></TextBlock>
+                        <TextBox x:Name="textHttpCameraUrl" Width="200" TextAlignment="Center"/>
+                    </WrapPanel>
+                </StackPanel>
+                <Button DockPanel.Dock="Bottom" Name="buttonChangeVideoSource" Content="{DynamicResource Common_Save}" Width="50" Click="ChangeVideoSource_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
+            </DockPanel>
+        </TabItem>
+        <TabItem Header="{DynamicResource OptionsMenu_ControlLine_Header}">
+            <DockPanel LastChildFill="False">
+                <StackPanel DockPanel.Dock="Top" >
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_PositionHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox x:Name="textControlLinePosition" Width="60" TextAlignment="Center"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_WidthHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox x:Name="textControlLineWidth" Width="60" TextAlignment="Center"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_ShowLineHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <CheckBox Name="checkShowControlLine"></CheckBox>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_ColourHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <ComboBox Name="comboControlLineColor" Width="100" IsEnabled="False"></ComboBox>
+                    </WrapPanel>
+                </StackPanel>
+                <Button DockPanel.Dock="Bottom" Name="buttonChangeControlLine" Content="{DynamicResource Common_Save}" Width="50" Click="ChangeControlLine_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
+            </DockPanel>
+            
+        </TabItem>
+        <TabItem Header="{DynamicResource OptionsMenu_VideoStorage_Header}">
+            <DockPanel LastChildFill="False">
+                <StackPanel DockPanel.Dock="Top" >
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_VideoStorage_PathHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox Name="textVideoStoragePath" Width="150" TextAlignment="Center"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_VideoStorage_FramerateHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox Name="textFrameRate" Width="60" TextAlignment="Center"/>
+                    </WrapPanel>
+                </StackPanel>
+                <Button DockPanel.Dock="Bottom" Name="buttonSaveVideoStorageSettings" Content="{DynamicResource Common_Save}" Width="50" Click="SaveVideoStorage_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
+            </DockPanel>
+        </TabItem>
+    </TabControl>
+</Window>

@@ -18,6 +18,8 @@ namespace video_takeoff_control
             _mainWindow = mainWindow;
             InitializeComponent();
 
+            comboLanguage.SelectedIndex = 0;
+
             textControlLinePosition.Text = Settings.controlLineX.ToString();
             textControlLineWidth.Text = Settings.controlLineWidth.ToString();
             checkShowControlLine.IsChecked = Settings.showControlLine;
@@ -32,6 +34,20 @@ namespace video_takeoff_control
 
             textHttpCameraUrl.Text = Settings.httpVideoSourceURL["cam1"];
             comboVideoSourceType.SelectedIndex = (int) Settings.selectedVideoSourceType;
+        }
+
+        private void ChangeCommon_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string culture = comboLanguage.SelectedValue.ToString();
+                Settings.uiCulture = culture;
+                App.ChangeLanguage(culture);
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im ChangeCommon_Click Button: {ex.ToString()}");
+            }
         }
 
         private void ChangeVideoSource_Click(object sender, RoutedEventArgs e)
