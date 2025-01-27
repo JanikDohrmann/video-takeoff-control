@@ -7,12 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-
-### Fixed
+- Added support for UI localisation
 
 ### Changed
-
-### Removed
+- Changed logger to use culture indepentent time format
 
 ## [0.0.3] - 2025-01-06
 
