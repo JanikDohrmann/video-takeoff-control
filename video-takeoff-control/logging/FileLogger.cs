@@ -60,7 +60,7 @@ namespace video_takeoff_control.logging
             string filename = string.Format("log_video-takeoff-control_{0}.log", DateTime.Now.ToString("yyyy-MM-dd"));
             string filepath = Path.Combine(logPath, filename);
 
-            File.AppendAllText(filepath, string.Format("{0}\t{1}\t{2}\n", DateTime.Now, logLevel, message));
+            File.AppendAllText(filepath, string.Format("{0}\t{1}\t{2}\n", DateTime.Now.ToString("yyyy-MM-ddThh:mm:ss"), logLevel, message));
         }
 
         /// <inheritdoc />
