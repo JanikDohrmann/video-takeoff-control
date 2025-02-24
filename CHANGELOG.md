@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Added support for UI localisation
+- Added horizontal control line and center button for control lines
 
 ### Changed
 - Changed logger to use culture indepentent time format
