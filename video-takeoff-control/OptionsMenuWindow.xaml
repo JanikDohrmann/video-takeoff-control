@@ -43,16 +43,28 @@
             <DockPanel LastChildFill="False">
                 <StackPanel DockPanel.Dock="Top" >
                     <WrapPanel Margin="0,5,0,5">
-                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_PositionHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
-                        <TextBox x:Name="textControlLinePosition" Width="60" TextAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_VerticalPositionHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox x:Name="textVerticalControlLinePosition" Width="60" TextAlignment="Center"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_HorizontalPositionHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <TextBox x:Name="textHorizontalControlLinePosition" Width="60" TextAlignment="Center"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_CenterControlLine}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <CheckBox Name="checkCenterControlLine"></CheckBox>
                     </WrapPanel>
                     <WrapPanel Margin="0,5,0,5">
                         <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_WidthHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
                         <TextBox x:Name="textControlLineWidth" Width="60" TextAlignment="Center"/>
                     </WrapPanel>
                     <WrapPanel Margin="0,5,0,5">
-                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_ShowLineHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
-                        <CheckBox Name="checkShowControlLine"></CheckBox>
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_ShowVerticalLineHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <CheckBox Name="checkShowVerticalControlLine"></CheckBox>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,5,0,5">
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_ShowHorizontalLineHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
+                        <CheckBox Name="checkShowHorizontalControlLine"></CheckBox>
                     </WrapPanel>
                     <WrapPanel Margin="0,5,0,5">
                         <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_ColourHeader}" Margin="0,0,10,0" Width="200"></TextBlock>

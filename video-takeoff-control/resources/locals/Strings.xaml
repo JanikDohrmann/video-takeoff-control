@@ -51,14 +51,23 @@
     <sys:String x:Key="OptionsMenu_ControlLine_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Control Line
     </sys:String>
-    <sys:String x:Key="OptionsMenu_ControlLine_PositionHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-        Control Line Position:
+    <sys:String x:Key="OptionsMenu_ControlLine_VerticalPositionHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Vertical Control Line Position:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_HorizontalPositionHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Horizontal Control Line Position:
     </sys:String>
     <sys:String x:Key="OptionsMenu_ControlLine_WidthHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Control Line Width:
     </sys:String>
-    <sys:String x:Key="OptionsMenu_ControlLine_ShowLineHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-        Show Control Line:
+    <sys:String x:Key="OptionsMenu_ControlLine_ShowVerticalLineHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Show Vertical Control Line:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_ShowHorizontalLineHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Show Horizontal Control Line:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_CenterControlLine" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Center Control Line:
     </sys:String>
     <sys:String x:Key="OptionsMenu_ControlLine_ColourHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Control Line Colour:

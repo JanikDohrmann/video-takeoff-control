@@ -51,14 +51,23 @@
     <sys:String x:Key="OptionsMenu_ControlLine_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Kontrolllinie
     </sys:String>
-    <sys:String x:Key="OptionsMenu_ControlLine_PositionHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-        Kontrollinie Position:
+    <sys:String x:Key="OptionsMenu_ControlLine_VerticalPositionHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Vertiale Kontrollinie Position:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_HorizontalPositionHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Horizontale Kontrollinie Position:
     </sys:String>
     <sys:String x:Key="OptionsMenu_ControlLine_WidthHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Kontrollinie Breite:
     </sys:String>
-    <sys:String x:Key="OptionsMenu_ControlLine_ShowLineHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-        Kontrollinie anzeigen:
+    <sys:String x:Key="OptionsMenu_ControlLine_ShowVerticalLineHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Vertikale Kontrolline anzeigen:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_ShowHorizontalLineHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Horizontale Kontrolline anzeigen:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_ControlLine_CenterControlLine" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Kontrollinie zentrieren:
     </sys:String>
     <sys:String x:Key="OptionsMenu_ControlLine_ColourHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Kontrollinie Farbe:

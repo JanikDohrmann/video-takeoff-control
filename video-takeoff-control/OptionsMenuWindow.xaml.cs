@@ -20,9 +20,12 @@ namespace video_takeoff_control
 
             comboLanguage.SelectedIndex = 0;
 
-            textControlLinePosition.Text = Settings.controlLineX.ToString();
+            textVerticalControlLinePosition.Text = Settings.controlLineX.ToString();
+            textHorizontalControlLinePosition.Text = Settings.controlLineY.ToString();
             textControlLineWidth.Text = Settings.controlLineWidth.ToString();
-            checkShowControlLine.IsChecked = Settings.showControlLine;
+            checkShowVerticalControlLine.IsChecked = Settings.showVerticalControlLine;
+            checkShowHorizontalControlLine.IsChecked = Settings.showHorizontalControlLine;
+            checkCenterControlLine.IsChecked = Settings.centerControlLine;
             
             List<String> controlLineColorOptions = new List<String>();
             controlLineColorOptions.Add(Settings.controlLineColor.Name);
@@ -69,11 +72,18 @@ namespace video_takeoff_control
 
         private void ChangeControlLine_Click(object sender, RoutedEventArgs e)
         {
-            string controlLinePosition = textControlLinePosition.Text;
+            string verticalControlLinePosition = textVerticalControlLinePosition.Text;
 
-            if (Regex.IsMatch(controlLinePosition, "\\d+"))
+            if (Regex.IsMatch(verticalControlLinePosition, "\\d+"))
             {
-                Settings.controlLineX = Int32.Parse(controlLinePosition);
+                Settings.controlLineX = Int32.Parse(verticalControlLinePosition);
+            }
+
+            string horizontalControlLinePosition = textHorizontalControlLinePosition.Text;
+
+            if (Regex.IsMatch(horizontalControlLinePosition, "\\d+"))
+            {
+                Settings.controlLineY = Int32.Parse(horizontalControlLinePosition);
             }
 
             string controlLineWidth = textControlLineWidth.Text;
@@ -83,7 +93,9 @@ namespace video_takeoff_control
                 Settings.controlLineWidth = Int32.Parse(controlLineWidth);
             }
 
-            Settings.showControlLine = checkShowControlLine.IsChecked.GetValueOrDefault(true);
+            Settings.showVerticalControlLine = checkShowVerticalControlLine.IsChecked.GetValueOrDefault(true);
+            Settings.showHorizontalControlLine = checkShowHorizontalControlLine.IsChecked.GetValueOrDefault(true);
+            Settings.centerControlLine = checkCenterControlLine.IsChecked.GetValueOrDefault(false);
         }
 
         private void SaveVideoStorage_Click(object sender, RoutedEventArgs e)
