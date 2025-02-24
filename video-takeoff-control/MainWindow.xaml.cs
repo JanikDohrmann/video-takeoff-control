@@ -114,18 +114,30 @@ namespace video_takeoff_control
 
         private void ForwardButton_Click(object sender, RoutedEventArgs e)
         {
-            int newFrameCounter = frameCounter < recordedVideo.Count - 1 ? frameCounter++ : recordedVideo.Count - 1;
-            updateFrameProgress();
-            Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[newFrameCounter]));
-            
+            moveFrame(1);
         }
 
         private void BackwardButton_Click(object sender, RoutedEventArgs e)
         {
-            int newFrameCounter = frameCounter > 0 ? frameCounter-- : 0;
+            moveFrame(-1);
+        }
+
+        private void moveFrame(int step)
+        {
+            if(step > 0) 
+            {
+                int newFrameCounter = frameCounter < recordedVideo.Count - 1 ? frameCounter + step : recordedVideo.Count - 1;
+                frameCounter = newFrameCounter;
+            }
+            else if(step < 0)
+            {
+                int newFrameCounter = frameCounter > 0 ? frameCounter + step : 0;
+                frameCounter = newFrameCounter;
+                
+            }
+
             updateFrameProgress();
-            Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[newFrameCounter]));
-            
+            Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[frameCounter]));
         }
 
         private void updateFrameProgress()
@@ -208,14 +220,10 @@ namespace video_takeoff_control
             switch (e.Key)
             {
                 case Key.Left:
-                    newFrameCounter = frameCounter > 0 ? frameCounter-- : 0;
-                    Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[newFrameCounter]));
-                    updateFrameProgress();
+                    moveFrame(-1);
                     break;
                 case Key.Right:
-                    newFrameCounter = frameCounter < recordedVideo.Count - 1 ? frameCounter++ : recordedVideo.Count - 1;
-                    Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[newFrameCounter]));
-                    updateFrameProgress();
+                    moveFrame(1);
                     break;
             }
         }
