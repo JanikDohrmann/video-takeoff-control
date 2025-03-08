@@ -5,7 +5,7 @@ using video_takeoff_control.video_source;
 using video_takeoff_control.util;
 using System.IO;
 
-namespace video_takeoff_control
+namespace video_takeoff_control.settings
 {
     public class Settings
     {

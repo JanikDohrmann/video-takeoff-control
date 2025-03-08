@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using video_takeoff_control.bitmap_tools;
 using video_takeoff_control.logging;
+using video_takeoff_control.settings;
 using video_takeoff_control.video_file_handler;
 using video_takeoff_control.video_source;
 

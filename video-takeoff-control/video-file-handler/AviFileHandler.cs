@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using video_takeoff_control.logging;
+using video_takeoff_control.settings;
 
 namespace video_takeoff_control.video_file_handler
 {

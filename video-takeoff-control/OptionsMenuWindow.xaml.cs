@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using video_takeoff_control.logging;
+using video_takeoff_control.settings;
 using video_takeoff_control.video_source;
 
 namespace video_takeoff_control
