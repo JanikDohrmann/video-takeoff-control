@@ -36,8 +36,7 @@ namespace video_takeoff_control
 
         public MainWindow()
         {
-            string commonApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string logpath = Path.Combine(commonApplicationDataFolder, "videoo-takeoff-control\\logs\\");
+            string logpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control", "logs");
             logger = FileLogger.create(logpath);
 
             logger.Log(LogLevel.Information, "Starting!");
@@ -73,7 +72,7 @@ namespace video_takeoff_control
         {
             this.settings = settings_new;
 
-            setupCamera(settings.selectedVideoSourceType);
+            setupCamera(settings.videoSources[0].selectedVideoSourceType);
             MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
 
             videoFileHandler = new AviFileHandler(settings);

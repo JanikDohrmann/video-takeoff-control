@@ -38,8 +38,8 @@ namespace video_takeoff_control
             textVideoStoragePath.Text = settings.storageFolderPath;
             textFrameRate.Text = settings.framerate.ToString();
 
-            textHttpCameraUrl.Text = settings.httpVideoSourceURL["cam1"];
-            comboVideoSourceType.SelectedIndex = (int)settings.selectedVideoSourceType;
+            textHttpCameraUrl.Text = settings.videoSources[0].hostname;
+            comboVideoSourceType.SelectedIndex = (int)settings.videoSources[0].selectedVideoSourceType;
         }
 
         private void ChangeCommon_Click(object sender, RoutedEventArgs e)
@@ -63,9 +63,9 @@ namespace video_takeoff_control
         {
             try
             {
-                settings.httpVideoSourceURL["cam1"] = textHttpCameraUrl.Text;
+                settings.videoSources[0].hostname = textHttpCameraUrl.Text;
                 VideoSourceType videoSourceType = comboVideoSourceType.SelectedIndex == 0 ? VideoSourceType.Webcam : VideoSourceType.SimpleHttpCamera;
-                settings.selectedVideoSourceType = videoSourceType;
+                settings.videoSources[0].selectedVideoSourceType = videoSourceType;
                 MainWindow.GetLogger().Log(LogLevel.Debug, $"Video Source Type selected: {videoSourceType.ToString()}");
                 Settings.storeSettings(settings);
                 _mainWindow.setup(settings);

@@ -32,7 +32,7 @@ namespace video_takeoff_control.video_source
             this.mainWindow = mainWindow;
             this.settings = settings;
             httpClient = new HttpClient();
-            this.videoSourceUrl = this.settings.httpVideoSourceURL[camId];
+            this.videoSourceUrl = this.settings.videoSources[0].hostname;
             
         }
         public void close()

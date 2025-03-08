@@ -31,8 +31,7 @@ namespace video_takeoff_control.settings
         public string competitionName { get; set; }
 
         //Video Source
-        public VideoSourceType selectedVideoSourceType { get; set; }
-        public Dictionary<string, string> httpVideoSourceURL { get; set; }
+        public List<VideoSourceSettings> videoSources { get; set; }
 
         //Init
         public static Settings loadSettings()
@@ -50,12 +49,14 @@ namespace video_takeoff_control.settings
                 storageFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control", "recordings"),
                 framerate = 30,
                 competitionName = "Wettkampfname",
-                selectedVideoSourceType = VideoSourceType.Webcam,
-                httpVideoSourceURL = new Dictionary<string, string>(),
+                videoSources = new List<VideoSourceSettings>(),
             };
 
-            settings.httpVideoSourceURL.Add("cam1", "http://10.1.1.69:8080/shot.jpg");
-
+            settings.videoSources.Add(new VideoSourceSettings
+            {
+                name = "cam1",
+                selectedVideoSourceType = VideoSourceType.Webcam,
+            });
 
             if (File.Exists(SETTINGS_STORAGE_PATH))
             {
