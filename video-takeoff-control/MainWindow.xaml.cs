@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -43,17 +44,8 @@ namespace video_takeoff_control
 
             try
             {
+                
                 setup();
-
-                InitializeComponent();
-                recordedVideo = new List<BitmapImage>();
-                frameCounter = 0;
-                recording = false;
-
-                buttonBack.IsEnabled = false;
-                buttonForward.IsEnabled = false;
-                buttonStopRecord.IsEnabled = false;
-                buttonClear.IsEnabled = false;
             }
             catch (Exception ex)
             {
@@ -74,6 +66,19 @@ namespace video_takeoff_control
 
             setupCamera(settings.videoSources[0].selectedVideoSourceType);
             MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
+
+            recordedVideo = new List<BitmapImage>();
+            frameCounter = 0;
+            recording = false;
+
+            InitializeComponent();
+
+            buttonBack.IsEnabled = false;
+            buttonForward.IsEnabled = false;
+            buttonStopRecord.IsEnabled = false;
+            buttonClear.IsEnabled = false;
+
+            updateCompetitionName();
 
             videoFileHandler = new AviFileHandler(settings);
         }
@@ -199,7 +204,7 @@ namespace video_takeoff_control
                 recordedVideo.Add(bitmapImage);
             }
 
-            Dispatcher.BeginInvoke(new Action(() => image.Source = bitmapImage));
+            Dispatcher.BeginInvoke(new Action(() => { image.Source = bitmapImage; }));
         }
 
         private void openAboutWindow_Click(object sender, RoutedEventArgs e)
@@ -261,21 +266,27 @@ namespace video_takeoff_control
                 if (videoSource != null)
                 {
                     videoSource.close();
+                    videoSource = null;
+                    Thread.Sleep(1000);
                 }
 
                 switch (type)
                 {
                     case VideoSourceType.Webcam:
+                        MainWindow.GetLogger().Log(LogLevel.Debug, "Creating new webcam video source");
                         videoSource = new WebcamSource(this);
                         videoSource.preview();
                         break;
                     case VideoSourceType.SimpleHttpCamera:
+                        MainWindow.GetLogger().Log(LogLevel.Debug, "Creating new simple http camera video source");
                         videoSource = new SimpleHttpVideoSource(this, "cam1", settings);
                         videoSource.preview();
                         break;
                     default:
+                        throw new ArgumentException();
                         break;
                 }
+                MainWindow.GetLogger().Log(LogLevel.Debug, "New video source: " + videoSource);
             }
             catch (Exception ex)
             {

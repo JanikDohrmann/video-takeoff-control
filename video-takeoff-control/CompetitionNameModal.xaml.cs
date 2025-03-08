@@ -28,12 +28,14 @@ namespace video_takeoff_control
             _mainWindow = mainWindow;
             this.settings = settings;
             InitializeComponent();
+            textCompetitionName.Text = settings.competitionName;
         }
 
         private void saveCompetitionName_Click(object sender, RoutedEventArgs e)
         {
             settings.competitionName = textCompetitionName.Text;
             _mainWindow.updateCompetitionName();
+            Settings.storeSettings(settings);
             this.Close();
         }
     }

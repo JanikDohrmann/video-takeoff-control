@@ -22,7 +22,12 @@ namespace video_takeoff_control.video_file_handler
         {
             try
             {
-                 AviWriter aviWriter = new AviWriter(filename)
+                if(!Directory.Exists(settings.storageFolderPath))
+                {
+                    Directory.CreateDirectory(settings.storageFolderPath);
+                }
+
+                AviWriter aviWriter = new AviWriter(filename)
                 {
                     FramesPerSecond = settings.framerate,
                     EmitIndex1 = true,

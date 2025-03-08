@@ -21,7 +21,7 @@ namespace video_takeoff_control
             this.settings = settings;
             InitializeComponent();
 
-            comboLanguage.SelectedIndex = 0;
+            comboLanguage.SelectedValue = settings.uiCulture;
 
             textVerticalControlLinePosition.Text = settings.controlLineX.ToString();
             textHorizontalControlLinePosition.Text = settings.controlLineY.ToString();

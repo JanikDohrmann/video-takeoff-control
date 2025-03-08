@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using video_takeoff_control.logging;
 
 namespace video_takeoff_control.video_source
 {
@@ -52,7 +53,7 @@ namespace video_takeoff_control.video_source
         }
 
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        {
+        {      
             using (Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone())
             {
                 mainWindow.newFrame(bitmap);
