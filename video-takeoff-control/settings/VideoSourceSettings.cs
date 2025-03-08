@@ -12,5 +12,6 @@ namespace video_takeoff_control.settings
         public string name { get; set; }
         public VideoSourceType selectedVideoSourceType { get; set; }
         public string hostname { get; set; }
+        public int framerate { get; set; }
     }
 }

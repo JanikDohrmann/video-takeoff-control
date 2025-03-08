@@ -18,7 +18,7 @@ namespace video_takeoff_control.video_file_handler
             this.settings = settings;
         }
 
-        public void saveVideo(string filename, List<Bitmap> frames)
+        public void saveVideo(string filename, List<Bitmap> frames, int framerate)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace video_takeoff_control.video_file_handler
 
                 AviWriter aviWriter = new AviWriter(filename)
                 {
-                    FramesPerSecond = settings.framerate,
+                    FramesPerSecond = framerate,
                     EmitIndex1 = true,
                 };
 

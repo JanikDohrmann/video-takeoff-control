@@ -5,6 +5,6 @@ namespace video_takeoff_control.video_file_handler
 {
     internal interface IVideoFileHandler
     {
-        void saveVideo(string filePath, List<Bitmap> frames);
+        void saveVideo(string filePath, List<Bitmap> frames, int framerate);
     }
 }

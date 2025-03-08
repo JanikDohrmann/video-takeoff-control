@@ -36,7 +36,7 @@ namespace video_takeoff_control
             comboControlLineColor.SelectedIndex = 0;
 
             textVideoStoragePath.Text = settings.storageFolderPath;
-            textFrameRate.Text = settings.framerate.ToString();
+            textFrameRate.Text = settings.videoSources[0].framerate.ToString();
 
             textHttpCameraUrl.Text = settings.videoSources[0].hostname;
             comboVideoSourceType.SelectedIndex = (int)settings.videoSources[0].selectedVideoSourceType;
@@ -115,7 +115,7 @@ namespace video_takeoff_control
 
             if (Regex.IsMatch(framerate, "\\d+"))
             {
-                settings.framerate = Int32.Parse(framerate);
+                settings.videoSources[0].framerate = Int32.Parse(framerate);
             }
             Settings.storeSettings(settings);
             _mainWindow.setup(settings);

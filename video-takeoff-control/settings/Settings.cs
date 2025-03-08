@@ -25,7 +25,6 @@ namespace video_takeoff_control.settings
 
         //Video Storage
         public string storageFolderPath { get; set; }
-        public int framerate { get; set; }
 
         //Competition
         public string competitionName { get; set; }
@@ -47,7 +46,6 @@ namespace video_takeoff_control.settings
                 showHorizontalControlLine = false,
                 centerControlLine = false,
                 storageFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control", "recordings"),
-                framerate = 30,
                 competitionName = "Wettkampfname",
                 videoSources = new List<VideoSourceSettings>(),
             };
@@ -56,6 +54,7 @@ namespace video_takeoff_control.settings
             {
                 name = "cam1",
                 selectedVideoSourceType = VideoSourceType.Webcam,
+                framerate = 30,
             });
 
             if (File.Exists(SETTINGS_STORAGE_PATH))
