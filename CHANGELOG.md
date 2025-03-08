@@ -5,18 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.0] - 2025-02-24
+## [Unreleased]
 ### Added
-- Added support for UI localisation
-- Added horizontal control line and center button for control lines
+- Added functionality for storing settings to disk
 
 ### Changed
-- Changed logger to use culture indepentent time format
 
 ### Fixed
-- Fixed issue with jumping timeline
 
-## [Unreleased]
+### Removed
+
+## [0.1.0] - 2025-02-24
 ### Added
 - Added support for UI localisation
 - Added horizontal control line and center button for control lines
