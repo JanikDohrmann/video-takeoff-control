@@ -10,13 +10,20 @@ namespace video_takeoff_control.video_file_handler
 {
     internal class AviFileHandler : IVideoFileHandler
     {
+        private Settings settings;
+
+        public AviFileHandler(Settings settings)
+        {
+            this.settings = settings;
+        }
+
         public void saveVideo(string filename, List<Bitmap> frames)
         {
             try
             {
                  AviWriter aviWriter = new AviWriter(filename)
                 {
-                    FramesPerSecond = Settings.framerate,
+                    FramesPerSecond = settings.framerate,
                     EmitIndex1 = true,
                 };
 

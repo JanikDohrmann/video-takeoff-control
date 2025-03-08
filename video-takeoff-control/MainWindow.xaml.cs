@@ -21,6 +21,8 @@ namespace video_takeoff_control
     {
         List<Window> childWindows = new List<Window>();
 
+        private Settings settings;
+
         private List<BitmapImage> recordedVideo;
         private int frameCounter;
 
@@ -41,17 +43,12 @@ namespace video_takeoff_control
 
             try
             {
-                Settings.initializeSettings();
+                setup();
 
                 InitializeComponent();
                 recordedVideo = new List<BitmapImage>();
                 frameCounter = 0;
                 recording = false;
-
-                setupCamera(Settings.selectedVideoSourceType);
-                MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
-
-                videoFileHandler = new AviFileHandler();
 
                 buttonBack.IsEnabled = false;
                 buttonForward.IsEnabled = false;
@@ -63,6 +60,22 @@ namespace video_takeoff_control
                 MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im MainWindow: {ex.ToString()}");
             }
             
+        }
+
+        private void setup()
+        {
+            Settings settings_new = Settings.loadSettings();
+            setup(settings_new);
+        } 
+
+        public void setup(Settings settings_new)
+        {
+            this.settings = settings_new;
+
+            setupCamera(settings.selectedVideoSourceType);
+            MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
+
+            videoFileHandler = new AviFileHandler(settings);
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -94,7 +107,7 @@ namespace video_takeoff_control
         {   
             try
             {
-                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, Settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList()));
+                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList()));
                 resetFrameProgress();
                 videoSource.preview();
 
@@ -170,14 +183,14 @@ namespace video_takeoff_control
 
         private void openOptionsMenu_Click(object sender, RoutedEventArgs e)
         {
-            OptionsMenuWindow optionsMenuWindow = new OptionsMenuWindow(this);
+            OptionsMenuWindow optionsMenuWindow = new OptionsMenuWindow(this, settings);
             childWindows.Add(optionsMenuWindow);
             optionsMenuWindow.Show();
         }
 
         public void newFrame(Bitmap frame)
         {
-            ControlLine.drawControlLine(frame);
+            ControlLine.drawControlLine(frame, settings);
             BitmapTools.addMetadata(frame);
             BitmapImage bitmapImage = BitmapConversions.bitmap2BitmapImage(frame);
 
@@ -231,15 +244,14 @@ namespace video_takeoff_control
         private void openCompetitionModal_Click(object sender, RoutedEventArgs e)
         {
             buttonStartRecord.Focus();
-            CompetitionNameModal competitionNameModal = new CompetitionNameModal();
+            CompetitionNameModal competitionNameModal = new CompetitionNameModal(this, settings);
             childWindows.Add(competitionNameModal);
-            competitionNameModal.mainWindow = this;
             competitionNameModal.Show();
         }
 
         public void updateCompetitionName()
         {
-            textCompetitionName.Text = Settings.competitionName;
+            textCompetitionName.Text = settings.competitionName;
         }
 
         public void setupCamera(VideoSourceType type)
@@ -258,7 +270,7 @@ namespace video_takeoff_control
                         videoSource.preview();
                         break;
                     case VideoSourceType.SimpleHttpCamera:
-                        videoSource = new SimpleHttpVideoSource(this, "cam1");
+                        videoSource = new SimpleHttpVideoSource(this, "cam1", settings);
                         videoSource.preview();
                         break;
                     default:

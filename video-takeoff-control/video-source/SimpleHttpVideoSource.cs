@@ -15,6 +15,7 @@ namespace video_takeoff_control.video_source
     {
 
         private MainWindow mainWindow;
+        private Settings settings;
 
         private HttpClient httpClient;
 
@@ -25,11 +26,12 @@ namespace video_takeoff_control.video_source
 
         private bool running = false;
 
-        public SimpleHttpVideoSource(MainWindow mainWindow, string camId)
+        public SimpleHttpVideoSource(MainWindow mainWindow, string camId, Settings settings)
         {
             this.mainWindow = mainWindow;
+            this.settings = settings;
             httpClient = new HttpClient();
-            this.videoSourceUrl = Settings.httpVideoSourceURL[camId];
+            this.videoSourceUrl = this.settings.httpVideoSourceURL[camId];
             
         }
         public void close()

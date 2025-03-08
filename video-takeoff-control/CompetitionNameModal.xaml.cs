@@ -19,17 +19,20 @@ namespace video_takeoff_control
     /// </summary>
     public partial class CompetitionNameModal : Window
     {
-        public MainWindow mainWindow { get; set; }
+        private MainWindow _mainWindow;
+        private Settings settings;
 
-        public CompetitionNameModal()
+        public CompetitionNameModal(MainWindow mainWindow, Settings settings)
         {
+            _mainWindow = mainWindow;
+            this.settings = settings;
             InitializeComponent();
         }
 
         private void saveCompetitionName_Click(object sender, RoutedEventArgs e)
         {
-            Settings.competitionName = textCompetitionName.Text;
-            mainWindow.updateCompetitionName();
+            settings.competitionName = textCompetitionName.Text;
+            _mainWindow.updateCompetitionName();
             this.Close();
         }
     }
