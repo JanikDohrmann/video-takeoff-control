@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:video_takeoff_control"
         mc:Ignorable="d"
-        Title="{DynamicResource Common_ApplicationTitle}" Height="450" Width="800">
+        Title="{DynamicResource Common_ApplicationTitle}" Height="450" Width="800" Icon="/vtc_icon.jpg">
     <DockPanel LastChildFill="True"  Background="LightGray">
         <Menu DockPanel.Dock="Top" Name="menuProgram"  Background="LightGray">
             <MenuItem Header="{DynamicResource Menu_File}">

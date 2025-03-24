@@ -9,11 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="vtc_icon.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AForge" Version="2.2.5" />
     <PackageReference Include="AForge.Video" Version="2.2.5" />
     <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
     <PackageReference Include="SharpAvi" Version="3.0.1" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="vtc_icon.jpg" />
   </ItemGroup>
 
 </Project>
