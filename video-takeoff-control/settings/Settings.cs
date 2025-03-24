@@ -50,13 +50,6 @@ namespace video_takeoff_control.settings
                 videoSources = new List<VideoSourceSettings>(),
             };
 
-            settings.videoSources.Add(new VideoSourceSettings
-            {
-                name = "cam1",
-                selectedVideoSourceType = VideoSourceType.Webcam,
-                framerate = 30,
-            });
-
             if (File.Exists(SETTINGS_STORAGE_PATH))
             {
                 MainWindow.GetLogger().Log(LogLevel.Information, "Existing settings file found. Reloading.");

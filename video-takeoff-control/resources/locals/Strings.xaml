@@ -7,6 +7,15 @@
     <sys:String x:Key="Common_Save" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Save
     </sys:String>
+    <sys:String x:Key="Common_Edit" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Edit
+    </sys:String>
+    <sys:String x:Key="Common_Add" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Add
+    </sys:String>
+    <sys:String x:Key="Common_Remove" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Remove
+    </sys:String>
     
     <!--Menu-->
     <sys:String x:Key="Menu_File" xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -26,6 +35,10 @@
         About
     </sys:String>
 
+    <sys:String x:Key="Menu_ActiveCamera" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Active Camera:
+    </sys:String>
+    
     <!--Options Menu-->
     <sys:String x:Key="OptionsMenu_WindowTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Options
@@ -46,6 +59,15 @@
     </sys:String>
     <sys:String x:Key="OptionsMenu_VideoSorce_HttpCameraUrlHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         HTTP Camera URL:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_VideoSorce_FramerateHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Framerate:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_VideoSorce_CameraName" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Name:
+    </sys:String>
+    <sys:String x:Key="OptionsMenu_VideoSorce_WebcamSelectHeader" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Video Source:
     </sys:String>
     
     <sys:String x:Key="OptionsMenu_ControlLine_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">

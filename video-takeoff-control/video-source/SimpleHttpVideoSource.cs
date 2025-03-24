@@ -16,7 +16,6 @@ namespace video_takeoff_control.video_source
     {
 
         private MainWindow mainWindow;
-        private Settings settings;
 
         private HttpClient httpClient;
 
@@ -27,12 +26,14 @@ namespace video_takeoff_control.video_source
 
         private bool running = false;
 
-        public SimpleHttpVideoSource(MainWindow mainWindow, string camId, Settings settings)
+        private int framerate;
+
+        public SimpleHttpVideoSource(MainWindow mainWindow, string hostname, int framerate)
         {
             this.mainWindow = mainWindow;
-            this.settings = settings;
+            this.framerate = framerate;
             httpClient = new HttpClient();
-            this.videoSourceUrl = this.settings.videoSources[0].hostname;
+            this.videoSourceUrl = hostname;
             
         }
         public void close()
@@ -58,6 +59,11 @@ namespace video_takeoff_control.video_source
         {
             running = false;
             task?.Dispose();
+        }
+
+        public int getFramerate()
+        {
+            return framerate;
         }
 
         private async void video_NewFrame()

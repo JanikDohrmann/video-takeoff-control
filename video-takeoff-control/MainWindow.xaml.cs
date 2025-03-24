@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using video_takeoff_control.bitmap_tools;
@@ -63,15 +64,24 @@ namespace video_takeoff_control
         public void setup(Settings settings_new)
         {
             this.settings = settings_new;
-
-            setupCamera(settings.videoSources[0].selectedVideoSourceType);
-            MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
+            if(settings.videoSources.Count > 0)
+            {
+                setupCamera(settings.videoSources[0]);
+                MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
+            }
 
             recordedVideo = new List<BitmapImage>();
             frameCounter = 0;
             recording = false;
 
             InitializeComponent();
+
+            comboActiveVideoSource.Items.Clear();
+            foreach (VideoSourceSettings videoSourceSettings in settings.videoSources)
+            {
+                comboActiveVideoSource.Items.Add(videoSourceSettings.name);
+            }
+            comboActiveVideoSource.SelectedIndex = 0;
 
             buttonBack.IsEnabled = false;
             buttonForward.IsEnabled = false;
@@ -112,7 +122,7 @@ namespace video_takeoff_control
         {   
             try
             {
-                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), settings.videoSources[0].framerate));
+                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), videoSource.getFramerate()));
                 resetFrameProgress();
                 videoSource.preview();
 
@@ -188,9 +198,16 @@ namespace video_takeoff_control
 
         private void openOptionsMenu_Click(object sender, RoutedEventArgs e)
         {
-            OptionsMenuWindow optionsMenuWindow = new OptionsMenuWindow(this, settings);
-            childWindows.Add(optionsMenuWindow);
-            optionsMenuWindow.Show();
+            try
+            {
+                OptionsMenuWindow optionsMenuWindow = new OptionsMenuWindow(this, settings);
+                childWindows.Add(optionsMenuWindow);
+                optionsMenuWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in openOptionsMenu Button: {ex.ToString()}");
+            }
         }
 
         public void newFrame(Bitmap frame)
@@ -259,7 +276,7 @@ namespace video_takeoff_control
             textCompetitionName.Text = settings.competitionName;
         }
 
-        public void setupCamera(VideoSourceType type)
+        public void setupCamera(VideoSourceSettings videoSourceSettings)
         {
             try
             {
@@ -270,16 +287,16 @@ namespace video_takeoff_control
                     Thread.Sleep(1000);
                 }
 
-                switch (type)
+                switch (videoSourceSettings.videoSourceType)
                 {
                     case VideoSourceType.Webcam:
                         MainWindow.GetLogger().Log(LogLevel.Debug, "Creating new webcam video source");
-                        videoSource = new WebcamSource(this);
+                        videoSource = new WebcamSource(this, videoSourceSettings.deviceAddress, videoSourceSettings.framerate);
                         videoSource.preview();
                         break;
                     case VideoSourceType.SimpleHttpCamera:
                         MainWindow.GetLogger().Log(LogLevel.Debug, "Creating new simple http camera video source");
-                        videoSource = new SimpleHttpVideoSource(this, "cam1", settings);
+                        videoSource = new SimpleHttpVideoSource(this, videoSourceSettings.hostname, videoSourceSettings.framerate);
                         videoSource.preview();
                         break;
                     default:
@@ -290,7 +307,27 @@ namespace video_takeoff_control
             }
             catch (Exception ex)
             {
-                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im Camera Setup: {ex.ToString()}");
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error during Camera Setup: {ex.ToString()}");
+            }
+        }
+
+        private void comboActiveVideoSource_Selected(object sender, SelectionChangedEventArgs e)
+        {
+            if(comboActiveVideoSource == null)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Debug, "comboActiveVideoSource is null ");
+                return;
+            }
+            if (comboActiveVideoSource.SelectedItem == null)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Debug, "comboActiveVideoSource.SelectedItem is null ");
+                return;
+            }
+
+            string slectedVideoSourceName = comboActiveVideoSource.SelectedItem.ToString();
+            if (!string.IsNullOrEmpty(slectedVideoSourceName))
+            {
+                setupCamera(settings.videoSources.Find(x => x.name.Equals(slectedVideoSourceName)));
             }
         }
     }

@@ -27,6 +27,8 @@ namespace video_takeoff_control.video_file_handler
                     Directory.CreateDirectory(settings.storageFolderPath);
                 }
 
+                MainWindow.GetLogger().Log(LogLevel.Debug, "Framerate: " + framerate);
+
                 AviWriter aviWriter = new AviWriter(filename)
                 {
                     FramesPerSecond = framerate,

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows;
 using video_takeoff_control.logging;
@@ -15,6 +16,14 @@ namespace video_takeoff_control
     {
         private MainWindow _mainWindow;
         private Settings settings;
+
+        public ObservableCollection<VideoSourceSettings> videoSourceSettingsItems { get; set; }
+
+        public OptionsMenuWindow()
+        {
+            this.Close();
+        }
+
         public OptionsMenuWindow(MainWindow mainWindow, Settings settings)
         {
             _mainWindow = mainWindow;
@@ -36,10 +45,9 @@ namespace video_takeoff_control
             comboControlLineColor.SelectedIndex = 0;
 
             textVideoStoragePath.Text = settings.storageFolderPath;
-            textFrameRate.Text = settings.videoSources[0].framerate.ToString();
 
-            textHttpCameraUrl.Text = settings.videoSources[0].hostname;
-            comboVideoSourceType.SelectedIndex = (int)settings.videoSources[0].selectedVideoSourceType;
+            videoSourceSettingsItems = new ObservableCollection<VideoSourceSettings>(settings.videoSources);
+            DataContext = this;
         }
 
         private void ChangeCommon_Click(object sender, RoutedEventArgs e)
@@ -59,14 +67,61 @@ namespace video_takeoff_control
             }
         }
 
+        private void AddVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                VideoSourceEditorWindow videoSourceEditorWindow = new VideoSourceEditorWindow(settings, this);
+                videoSourceEditorWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im AddVideoSource_Click Button: {ex.ToString()}");
+            }
+
+        }
+
+        private void EditVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int index = listVideoSources.SelectedIndex;
+                if (index >= 0)
+                {
+                    VideoSourceEditorWindow videoSourceEditorWindow = new VideoSourceEditorWindow(settings, this, settings.videoSources[index]);
+                    videoSourceEditorWindow.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im EditVideoSource_Click Button: {ex.ToString()}");
+            }
+
+        }
+
+        private void RemoveVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int index = listVideoSources.SelectedIndex;
+                if (index >= 0)
+                {
+                    VideoSourceSettings videoSourceSettings = settings.videoSources[index];
+                    settings.videoSources.RemoveAt(index);
+                    videoSourceSettingsItems.Remove(videoSourceSettings);
+                }
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im EditVideoSource_Click Button: {ex.ToString()}");
+            }
+
+        }
+
         private void ChangeVideoSource_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                settings.videoSources[0].hostname = textHttpCameraUrl.Text;
-                VideoSourceType videoSourceType = comboVideoSourceType.SelectedIndex == 0 ? VideoSourceType.Webcam : VideoSourceType.SimpleHttpCamera;
-                settings.videoSources[0].selectedVideoSourceType = videoSourceType;
-                MainWindow.GetLogger().Log(LogLevel.Debug, $"Video Source Type selected: {videoSourceType.ToString()}");
                 Settings.storeSettings(settings);
                 _mainWindow.setup(settings);
             }
@@ -75,6 +130,15 @@ namespace video_takeoff_control
                 MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im ChangeVideoSource_Click Button: {ex.ToString()}");
             }
 
+        }
+
+        public void updateUIVideoSourcesList()
+        {
+            videoSourceSettingsItems.Clear();
+            foreach (VideoSourceSettings item in (settings.videoSources))
+            {
+                videoSourceSettingsItems.Add(item);
+            }
         }
 
         private void ChangeControlLine_Click(object sender, RoutedEventArgs e)
@@ -111,12 +175,6 @@ namespace video_takeoff_control
         {
             settings.storageFolderPath = textVideoStoragePath.Text;
 
-            string framerate = textFrameRate.Text;
-
-            if (Regex.IsMatch(framerate, "\\d+"))
-            {
-                settings.videoSources[0].framerate = Int32.Parse(framerate);
-            }
             Settings.storeSettings(settings);
             _mainWindow.setup(settings);
         }
