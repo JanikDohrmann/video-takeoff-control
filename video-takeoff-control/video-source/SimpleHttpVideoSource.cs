@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using video_takeoff_control.logging;
+using video_takeoff_control.settings;
 
 namespace video_takeoff_control.video_source
 {
@@ -25,11 +26,14 @@ namespace video_takeoff_control.video_source
 
         private bool running = false;
 
-        public SimpleHttpVideoSource(MainWindow mainWindow, string camId)
+        private int framerate;
+
+        public SimpleHttpVideoSource(MainWindow mainWindow, string hostname, int framerate)
         {
             this.mainWindow = mainWindow;
+            this.framerate = framerate;
             httpClient = new HttpClient();
-            this.videoSourceUrl = Settings.httpVideoSourceURL[camId];
+            this.videoSourceUrl = hostname;
             
         }
         public void close()
@@ -55,6 +59,11 @@ namespace video_takeoff_control.video_source
         {
             running = false;
             task?.Dispose();
+        }
+
+        public int getFramerate()
+        {
+            return framerate;
         }
 
         private async void video_NewFrame()

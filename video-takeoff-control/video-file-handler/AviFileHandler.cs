@@ -5,18 +5,33 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using video_takeoff_control.logging;
+using video_takeoff_control.settings;
 
 namespace video_takeoff_control.video_file_handler
 {
     internal class AviFileHandler : IVideoFileHandler
     {
-        public void saveVideo(string filename, List<Bitmap> frames)
+        private Settings settings;
+
+        public AviFileHandler(Settings settings)
+        {
+            this.settings = settings;
+        }
+
+        public void saveVideo(string filename, List<Bitmap> frames, int framerate)
         {
             try
             {
-                 AviWriter aviWriter = new AviWriter(filename)
+                if(!Directory.Exists(settings.storageFolderPath))
                 {
-                    FramesPerSecond = Settings.framerate,
+                    Directory.CreateDirectory(settings.storageFolderPath);
+                }
+
+                MainWindow.GetLogger().Log(LogLevel.Debug, "Framerate: " + framerate);
+
+                AviWriter aviWriter = new AviWriter(filename)
+                {
+                    FramesPerSecond = framerate,
                     EmitIndex1 = true,
                 };
 

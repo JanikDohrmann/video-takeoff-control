@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using video_takeoff_control.logging;
 
 namespace video_takeoff_control.video_source
 {
@@ -11,15 +12,15 @@ namespace video_takeoff_control.video_source
     {
         private MainWindow mainWindow;
         
-        private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
 
-        public WebcamSource(MainWindow mainWindow)
+        private int framerate;
+
+        public WebcamSource(MainWindow mainWindow, string deviceAddress, int framerate)
         {
             this.mainWindow = mainWindow;
-
-            videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-            videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
+            this.framerate = framerate;
+            videoSource = new VideoCaptureDevice(deviceAddress);
             videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
         }
 
@@ -31,6 +32,11 @@ namespace video_takeoff_control.video_source
                 videoSource.NewFrame -= new NewFrameEventHandler(video_NewFrame);
                 videoSource = null;
             }
+        }
+
+        public int getFramerate()
+        {
+            return framerate;
         }
 
         public void preview()
@@ -52,7 +58,7 @@ namespace video_takeoff_control.video_source
         }
 
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        {
+        {      
             using (Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone())
             {
                 mainWindow.newFrame(bitmap);

@@ -1,0 +1,59 @@
+﻿<Window x:Class="video_takeoff_control.VideoSourceEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:video_takeoff_control"
+        mc:Ignorable="d"
+        Title="Video Source Editor" Height="250" Width="400">
+    <DockPanel LastChildFill="False">
+        <StackPanel DockPanel.Dock="Top" >
+            <WrapPanel Margin="0,5,0,5">
+                <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_CameraName}" Margin="0,0,10,0" Width="100"></TextBlock>
+                <TextBox x:Name="textCameraName" Text="Camera" Width="200"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,5">
+                <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_TypeHeader}" Margin="0,0,10,0" Width="100"></TextBlock>
+                <ComboBox x:Name="comboVideoSourceType" Width="200" SelectedValuePath="Content">
+                    <ComboBoxItem IsSelected="True">Webcam</ComboBoxItem>
+                    <ComboBoxItem>Simple HTTP-Camera</ComboBoxItem>
+                </ComboBox>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,5">
+                <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_FramerateHeader}" Margin="0,0,10,0" Width="100"></TextBlock>
+                <TextBox x:Name="textFramerate" Text="30" Width="200"/>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,5">
+                <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_HttpCameraUrlHeader}" Margin="0,0,10,0" Width="100"></TextBlock>
+                <TextBox x:Name="textHttpCameraUrl" Width="200">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedValue, ElementName=comboVideoSourceType}" Value="Simple HTTP-Camera">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </WrapPanel>
+            <WrapPanel Margin="0,5,0,5">
+                <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_WebcamSelectHeader}" Margin="0,0,10,0" Width="100"></TextBlock>
+                <ComboBox x:Name="comboVideoSourceWebcamSelect" Width="200" SelectedValuePath="Content">
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedValue, ElementName=comboVideoSourceType}" Value="Webcam">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+            </WrapPanel>
+        </StackPanel>
+        <Button DockPanel.Dock="Bottom" Name="buttonChangeVideoSource" Content="{DynamicResource Common_Save}" Width="50" Click="SaveVideoSource_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
+    </DockPanel>
+</Window>

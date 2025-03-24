@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:video_takeoff_control"
         mc:Ignorable="d"
         Title="{DynamicResource OptionsMenu_WindowTitle}" Height="450" Width="400"  Background="LightGray">
+    <Window.DataContext>
+        <local:OptionsMenuWindow/>
+    </Window.DataContext>
     <TabControl  Background="LightGray">
         <TabItem Header="{DynamicResource OptionsMenu_Common_Header}"  Selector.IsSelected="True">
             <DockPanel LastChildFill="False">
@@ -25,16 +28,39 @@
             <DockPanel LastChildFill="False">
                 <StackPanel DockPanel.Dock="Top" >
                     <WrapPanel Margin="0,5,0,5">
-                        <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_TypeHeader}" Margin="0,0,10,0" Width="100"></TextBlock>
-                        <ComboBox x:Name="comboVideoSourceType" Width="200">
-                            <ComboBoxItem Content="Webcam"></ComboBoxItem>
-                            <ComboBoxItem Content="Simple HTTP-Camera"></ComboBoxItem>
-                        </ComboBox>
+                        <Button Name="buttonEditVideoSource" Content="{DynamicResource Common_Edit}" Width="50" Click="EditVideoSource_Click" Margin="5"/>
+                        <Button Name="buttonAddNewVideoSource" Content="{DynamicResource Common_Add}" Width="50" Click="AddVideoSource_Click" Margin="5"/>
+                        <Button Name="buttonRemoveNewVideoSource" Content="{DynamicResource Common_Remove}" Width="50" Click="RemoveVideoSource_Click" Margin="5"/>
                     </WrapPanel>
-                    <WrapPanel Margin="0,5,0,5">
-                        <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_HttpCameraUrlHeader}" Margin="0,0,10,0" Width="100"></TextBlock>
-                        <TextBox x:Name="textHttpCameraUrl" Width="200" TextAlignment="Center"/>
-                    </WrapPanel>
+                    <ListView Name="listVideoSources" ItemsSource="{Binding videoSourceSettingsItems}" Height="200px">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Background="LightGray">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition Height="3*" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding name}" FontWeight="Bold" HorizontalAlignment="Left"  Margin="5" />
+                                    <TextBlock Text="{Binding videoSourceType}" HorizontalAlignment="Right"  Margin="5" />
+                                    <StackPanel Orientation="Vertical" Grid.Row="1">
+                                        <WrapPanel>
+                                            <TextBlock Text="Hostname: " Margin="5" />
+                                            <TextBlock Text="{Binding hostname}" Margin="5" />
+                                        </WrapPanel>
+                                        <WrapPanel>
+                                            <TextBlock Text="Framerate: " Margin="5" />
+                                            <TextBlock Text="{Binding framerate}" Margin="5" />
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </StackPanel>
                 <Button DockPanel.Dock="Bottom" Name="buttonChangeVideoSource" Content="{DynamicResource Common_Save}" Width="50" Click="ChangeVideoSource_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
             </DockPanel>
@@ -81,10 +107,6 @@
                     <WrapPanel Margin="0,5,0,5">
                         <TextBlock Text="{DynamicResource OptionsMenu_VideoStorage_PathHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
                         <TextBox Name="textVideoStoragePath" Width="150" TextAlignment="Center"/>
-                    </WrapPanel>
-                    <WrapPanel Margin="0,5,0,5">
-                        <TextBlock Text="{DynamicResource OptionsMenu_VideoStorage_FramerateHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
-                        <TextBox Name="textFrameRate" Width="60" TextAlignment="Center"/>
                     </WrapPanel>
                 </StackPanel>
                 <Button DockPanel.Dock="Bottom" Name="buttonSaveVideoStorageSettings" Content="{DynamicResource Common_Save}" Width="50" Click="SaveVideoStorage_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>

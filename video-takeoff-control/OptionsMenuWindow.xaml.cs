@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows;
 using video_takeoff_control.logging;
+using video_takeoff_control.settings;
 using video_takeoff_control.video_source;
 
 namespace video_takeoff_control
@@ -13,30 +15,39 @@ namespace video_takeoff_control
     public partial class OptionsMenuWindow : Window
     {
         private MainWindow _mainWindow;
-        public OptionsMenuWindow(MainWindow mainWindow)
+        private Settings settings;
+
+        public ObservableCollection<VideoSourceSettings> videoSourceSettingsItems { get; set; }
+
+        public OptionsMenuWindow()
+        {
+            this.Close();
+        }
+
+        public OptionsMenuWindow(MainWindow mainWindow, Settings settings)
         {
             _mainWindow = mainWindow;
+            this.settings = settings;
             InitializeComponent();
 
-            comboLanguage.SelectedIndex = 0;
+            comboLanguage.SelectedValue = settings.uiCulture;
 
-            textVerticalControlLinePosition.Text = Settings.controlLineX.ToString();
-            textHorizontalControlLinePosition.Text = Settings.controlLineY.ToString();
-            textControlLineWidth.Text = Settings.controlLineWidth.ToString();
-            checkShowVerticalControlLine.IsChecked = Settings.showVerticalControlLine;
-            checkShowHorizontalControlLine.IsChecked = Settings.showHorizontalControlLine;
-            checkCenterControlLine.IsChecked = Settings.centerControlLine;
+            textVerticalControlLinePosition.Text = settings.controlLineX.ToString();
+            textHorizontalControlLinePosition.Text = settings.controlLineY.ToString();
+            textControlLineWidth.Text = settings.controlLineWidth.ToString();
+            checkShowVerticalControlLine.IsChecked = settings.showVerticalControlLine;
+            checkShowHorizontalControlLine.IsChecked = settings.showHorizontalControlLine;
+            checkCenterControlLine.IsChecked = settings.centerControlLine;
             
             List<String> controlLineColorOptions = new List<String>();
-            controlLineColorOptions.Add(Settings.controlLineColor.Name);
+            controlLineColorOptions.Add(settings.controlLineColor.Name);
             comboControlLineColor.ItemsSource = controlLineColorOptions;
             comboControlLineColor.SelectedIndex = 0;
 
-            textVideoStoragePath.Text = Settings.storageFolderPath;
-            textFrameRate.Text = Settings.framerate.ToString();
+            textVideoStoragePath.Text = settings.storageFolderPath;
 
-            textHttpCameraUrl.Text = Settings.httpVideoSourceURL["cam1"];
-            comboVideoSourceType.SelectedIndex = (int) Settings.selectedVideoSourceType;
+            videoSourceSettingsItems = new ObservableCollection<VideoSourceSettings>(settings.videoSources);
+            DataContext = this;
         }
 
         private void ChangeCommon_Click(object sender, RoutedEventArgs e)
@@ -44,8 +55,11 @@ namespace video_takeoff_control
             try
             {
                 string culture = comboLanguage.SelectedValue.ToString();
-                Settings.uiCulture = culture;
+                settings.uiCulture = culture;
                 App.ChangeLanguage(culture);
+
+                Settings.storeSettings(settings);
+                _mainWindow.setup(settings);
             }
             catch (Exception ex)
             {
@@ -53,15 +67,63 @@ namespace video_takeoff_control
             }
         }
 
+        private void AddVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                VideoSourceEditorWindow videoSourceEditorWindow = new VideoSourceEditorWindow(settings, this);
+                videoSourceEditorWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im AddVideoSource_Click Button: {ex.ToString()}");
+            }
+
+        }
+
+        private void EditVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int index = listVideoSources.SelectedIndex;
+                if (index >= 0)
+                {
+                    VideoSourceEditorWindow videoSourceEditorWindow = new VideoSourceEditorWindow(settings, this, settings.videoSources[index]);
+                    videoSourceEditorWindow.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im EditVideoSource_Click Button: {ex.ToString()}");
+            }
+
+        }
+
+        private void RemoveVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int index = listVideoSources.SelectedIndex;
+                if (index >= 0)
+                {
+                    VideoSourceSettings videoSourceSettings = settings.videoSources[index];
+                    settings.videoSources.RemoveAt(index);
+                    videoSourceSettingsItems.Remove(videoSourceSettings);
+                }
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im EditVideoSource_Click Button: {ex.ToString()}");
+            }
+
+        }
+
         private void ChangeVideoSource_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                Settings.httpVideoSourceURL["cam1"] = textHttpCameraUrl.Text;
-                VideoSourceType videoSourceType = comboVideoSourceType.SelectedIndex == 0 ? VideoSourceType.Webcam : VideoSourceType.SimpleHttpCamera;
-                Settings.selectedVideoSourceType = videoSourceType;
-                MainWindow.GetLogger().Log(LogLevel.Debug, $"Video Source Type selected: {videoSourceType.ToString()}");
-                _mainWindow.setupCamera(videoSourceType);
+                Settings.storeSettings(settings);
+                _mainWindow.setup(settings);
             }
             catch (Exception ex)
             {
@@ -70,44 +132,51 @@ namespace video_takeoff_control
 
         }
 
+        public void updateUIVideoSourcesList()
+        {
+            videoSourceSettingsItems.Clear();
+            foreach (VideoSourceSettings item in (settings.videoSources))
+            {
+                videoSourceSettingsItems.Add(item);
+            }
+        }
+
         private void ChangeControlLine_Click(object sender, RoutedEventArgs e)
         {
             string verticalControlLinePosition = textVerticalControlLinePosition.Text;
 
             if (Regex.IsMatch(verticalControlLinePosition, "\\d+"))
             {
-                Settings.controlLineX = Int32.Parse(verticalControlLinePosition);
+                settings.controlLineX = Int32.Parse(verticalControlLinePosition);
             }
 
             string horizontalControlLinePosition = textHorizontalControlLinePosition.Text;
 
             if (Regex.IsMatch(horizontalControlLinePosition, "\\d+"))
             {
-                Settings.controlLineY = Int32.Parse(horizontalControlLinePosition);
+                settings.controlLineY = Int32.Parse(horizontalControlLinePosition);
             }
 
             string controlLineWidth = textControlLineWidth.Text;
 
             if (Regex.IsMatch(controlLineWidth, "\\d+"))
             {
-                Settings.controlLineWidth = Int32.Parse(controlLineWidth);
+                settings.controlLineWidth = Int32.Parse(controlLineWidth);
             }
 
-            Settings.showVerticalControlLine = checkShowVerticalControlLine.IsChecked.GetValueOrDefault(true);
-            Settings.showHorizontalControlLine = checkShowHorizontalControlLine.IsChecked.GetValueOrDefault(true);
-            Settings.centerControlLine = checkCenterControlLine.IsChecked.GetValueOrDefault(false);
+            settings.showVerticalControlLine = checkShowVerticalControlLine.IsChecked.GetValueOrDefault(true);
+            settings.showHorizontalControlLine = checkShowHorizontalControlLine.IsChecked.GetValueOrDefault(true);
+            settings.centerControlLine = checkCenterControlLine.IsChecked.GetValueOrDefault(false);
+            Settings.storeSettings(settings);
+            _mainWindow.setup(settings);
         }
 
         private void SaveVideoStorage_Click(object sender, RoutedEventArgs e)
         {
-            Settings.storageFolderPath = textVideoStoragePath.Text;
+            settings.storageFolderPath = textVideoStoragePath.Text;
 
-            string framerate = textFrameRate.Text;
-
-            if (Regex.IsMatch(framerate, "\\d+"))
-            {
-                Settings.framerate = Int32.Parse(framerate);
-            }
+            Settings.storeSettings(settings);
+            _mainWindow.setup(settings);
         }
     }
 }

@@ -1,42 +1,43 @@
 ﻿using System.Drawing;
+using video_takeoff_control.settings;
 
 namespace video_takeoff_control
 {
     internal class ControlLine
     {
-        public static void drawControlLine(Bitmap bitmap)
+        public static void drawControlLine(Bitmap bitmap, Settings settings)
         {
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
-                Pen pen = new Pen(Settings.controlLineColor, Settings.controlLineWidth);
+                Pen pen = new Pen(settings.controlLineColor, settings.controlLineWidth);
 
-                if(Settings.centerControlLine)
+                if(settings.centerControlLine)
                 {
-                    int x = (bitmap.Width / 2) - (Settings.controlLineWidth / 2);
-                    int y = (bitmap.Height / 2) - (Settings.controlLineWidth / 2);
+                    int x = (bitmap.Width / 2) - (settings.controlLineWidth / 2);
+                    int y = (bitmap.Height / 2) - (settings.controlLineWidth / 2);
 
-                    if (Settings.showVerticalControlLine)
+                    if (settings.showVerticalControlLine)
                     {
                         graphics.DrawLine(pen, new Point(x, 0), new Point(x, bitmap.Height));
                     }
-                    if (Settings.showHorizontalControlLine)
+                    if (settings.showHorizontalControlLine)
                     {
                         graphics.DrawLine(pen, new Point(0, y), new Point(bitmap.Width, y));
                     }
                 }
                 else
                 {
-                    int x = Settings.controlLineX <= bitmap.Width ? Settings.controlLineX : bitmap.Width;
-                    x = x >= 0 ? Settings.controlLineX : 0;
+                    int x = settings.controlLineX <= bitmap.Width ? settings.controlLineX : bitmap.Width;
+                    x = x >= 0 ? settings.controlLineX : 0;
 
-                    int y = Settings.controlLineY <= bitmap.Height ? Settings.controlLineY : bitmap.Height;
-                    y = y >= 0 ? Settings.controlLineY : 0;
+                    int y = settings.controlLineY <= bitmap.Height ? settings.controlLineY : bitmap.Height;
+                    y = y >= 0 ? settings.controlLineY : 0;
 
-                    if (Settings.showVerticalControlLine)
+                    if (settings.showVerticalControlLine)
                     {
                         graphics.DrawLine(pen, new Point(x, 0), new Point(x, bitmap.Height));
                     }
-                    if(Settings.showHorizontalControlLine)
+                    if(settings.showHorizontalControlLine)
                     {
                         graphics.DrawLine(pen, new Point(0, y), new Point(bitmap.Width, y));
                     }

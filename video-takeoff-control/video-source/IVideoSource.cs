@@ -12,5 +12,6 @@ namespace video_takeoff_control.video_source
         void stopRecording();
         void preview();
         void close();
+        int getFramerate();
     }
 }

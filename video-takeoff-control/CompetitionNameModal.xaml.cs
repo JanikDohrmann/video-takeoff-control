@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using video_takeoff_control.settings;
 
 namespace video_takeoff_control
 {
@@ -19,17 +20,22 @@ namespace video_takeoff_control
     /// </summary>
     public partial class CompetitionNameModal : Window
     {
-        public MainWindow mainWindow { get; set; }
+        private MainWindow _mainWindow;
+        private Settings settings;
 
-        public CompetitionNameModal()
+        public CompetitionNameModal(MainWindow mainWindow, Settings settings)
         {
+            _mainWindow = mainWindow;
+            this.settings = settings;
             InitializeComponent();
+            textCompetitionName.Text = settings.competitionName;
         }
 
         private void saveCompetitionName_Click(object sender, RoutedEventArgs e)
         {
-            Settings.competitionName = textCompetitionName.Text;
-            mainWindow.updateCompetitionName();
+            settings.competitionName = textCompetitionName.Text;
+            _mainWindow.updateCompetitionName();
+            Settings.storeSettings(settings);
             this.Close();
         }
     }

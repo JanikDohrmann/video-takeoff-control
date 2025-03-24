@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using video_takeoff_control.bitmap_tools;
 using video_takeoff_control.logging;
+using video_takeoff_control.settings;
 using video_takeoff_control.video_file_handler;
 using video_takeoff_control.video_source;
 
@@ -20,6 +23,8 @@ namespace video_takeoff_control
     public partial class MainWindow : Window
     {
         List<Window> childWindows = new List<Window>();
+
+        private Settings settings;
 
         private List<BitmapImage> recordedVideo;
         private int frameCounter;
@@ -33,36 +38,59 @@ namespace video_takeoff_control
 
         public MainWindow()
         {
-            string commonApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string logpath = Path.Combine(commonApplicationDataFolder, "videoo-takeoff-control\\logs\\");
+            string logpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control", "logs");
             logger = FileLogger.create(logpath);
 
             logger.Log(LogLevel.Information, "Starting!");
 
             try
             {
-                Settings.initializeSettings();
-
-                InitializeComponent();
-                recordedVideo = new List<BitmapImage>();
-                frameCounter = 0;
-                recording = false;
-
-                setupCamera(Settings.selectedVideoSourceType);
-                MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
-
-                videoFileHandler = new AviFileHandler();
-
-                buttonBack.IsEnabled = false;
-                buttonForward.IsEnabled = false;
-                buttonStopRecord.IsEnabled = false;
-                buttonClear.IsEnabled = false;
+                
+                setup();
             }
             catch (Exception ex)
             {
                 MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im MainWindow: {ex.ToString()}");
             }
             
+        }
+
+        private void setup()
+        {
+            Settings settings_new = Settings.loadSettings();
+            setup(settings_new);
+        } 
+
+        public void setup(Settings settings_new)
+        {
+            this.settings = settings_new;
+            if(settings.videoSources.Count > 0)
+            {
+                setupCamera(settings.videoSources[0]);
+                MainWindow.GetLogger().Log(LogLevel.Information, "Videosource created!");
+            }
+
+            recordedVideo = new List<BitmapImage>();
+            frameCounter = 0;
+            recording = false;
+
+            InitializeComponent();
+
+            comboActiveVideoSource.Items.Clear();
+            foreach (VideoSourceSettings videoSourceSettings in settings.videoSources)
+            {
+                comboActiveVideoSource.Items.Add(videoSourceSettings.name);
+            }
+            comboActiveVideoSource.SelectedIndex = 0;
+
+            buttonBack.IsEnabled = false;
+            buttonForward.IsEnabled = false;
+            buttonStopRecord.IsEnabled = false;
+            buttonClear.IsEnabled = false;
+
+            updateCompetitionName();
+
+            videoFileHandler = new AviFileHandler(settings);
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -94,7 +122,7 @@ namespace video_takeoff_control
         {   
             try
             {
-                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(Settings.storageFolderPath, Settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList()));
+                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), videoSource.getFramerate()));
                 resetFrameProgress();
                 videoSource.preview();
 
@@ -170,14 +198,21 @@ namespace video_takeoff_control
 
         private void openOptionsMenu_Click(object sender, RoutedEventArgs e)
         {
-            OptionsMenuWindow optionsMenuWindow = new OptionsMenuWindow(this);
-            childWindows.Add(optionsMenuWindow);
-            optionsMenuWindow.Show();
+            try
+            {
+                OptionsMenuWindow optionsMenuWindow = new OptionsMenuWindow(this, settings);
+                childWindows.Add(optionsMenuWindow);
+                optionsMenuWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in openOptionsMenu Button: {ex.ToString()}");
+            }
         }
 
         public void newFrame(Bitmap frame)
         {
-            ControlLine.drawControlLine(frame);
+            ControlLine.drawControlLine(frame, settings);
             BitmapTools.addMetadata(frame);
             BitmapImage bitmapImage = BitmapConversions.bitmap2BitmapImage(frame);
 
@@ -186,7 +221,7 @@ namespace video_takeoff_control
                 recordedVideo.Add(bitmapImage);
             }
 
-            Dispatcher.BeginInvoke(new Action(() => image.Source = bitmapImage));
+            Dispatcher.BeginInvoke(new Action(() => { image.Source = bitmapImage; }));
         }
 
         private void openAboutWindow_Click(object sender, RoutedEventArgs e)
@@ -231,43 +266,68 @@ namespace video_takeoff_control
         private void openCompetitionModal_Click(object sender, RoutedEventArgs e)
         {
             buttonStartRecord.Focus();
-            CompetitionNameModal competitionNameModal = new CompetitionNameModal();
+            CompetitionNameModal competitionNameModal = new CompetitionNameModal(this, settings);
             childWindows.Add(competitionNameModal);
-            competitionNameModal.mainWindow = this;
             competitionNameModal.Show();
         }
 
         public void updateCompetitionName()
         {
-            textCompetitionName.Text = Settings.competitionName;
+            textCompetitionName.Text = settings.competitionName;
         }
 
-        public void setupCamera(VideoSourceType type)
+        public void setupCamera(VideoSourceSettings videoSourceSettings)
         {
             try
             {
                 if (videoSource != null)
                 {
                     videoSource.close();
+                    videoSource = null;
+                    Thread.Sleep(1000);
                 }
 
-                switch (type)
+                switch (videoSourceSettings.videoSourceType)
                 {
                     case VideoSourceType.Webcam:
-                        videoSource = new WebcamSource(this);
+                        MainWindow.GetLogger().Log(LogLevel.Debug, "Creating new webcam video source");
+                        videoSource = new WebcamSource(this, videoSourceSettings.deviceAddress, videoSourceSettings.framerate);
                         videoSource.preview();
                         break;
                     case VideoSourceType.SimpleHttpCamera:
-                        videoSource = new SimpleHttpVideoSource(this, "cam1");
+                        MainWindow.GetLogger().Log(LogLevel.Debug, "Creating new simple http camera video source");
+                        videoSource = new SimpleHttpVideoSource(this, videoSourceSettings.hostname, videoSourceSettings.framerate);
                         videoSource.preview();
                         break;
                     default:
+                        throw new ArgumentException();
                         break;
                 }
+                MainWindow.GetLogger().Log(LogLevel.Debug, "New video source: " + videoSource);
             }
             catch (Exception ex)
             {
-                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im Camera Setup: {ex.ToString()}");
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error during Camera Setup: {ex.ToString()}");
+            }
+        }
+
+        private void comboActiveVideoSource_Selected(object sender, SelectionChangedEventArgs e)
+        {
+            if(comboActiveVideoSource == null)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Debug, "comboActiveVideoSource is null ");
+                return;
+            }
+            if (comboActiveVideoSource.SelectedItem == null)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Debug, "comboActiveVideoSource.SelectedItem is null ");
+                return;
+            }
+
+            string slectedVideoSourceName = comboActiveVideoSource.SelectedItem.ToString();
+            if (!string.IsNullOrEmpty(slectedVideoSourceName))
+            {
+                setupCamera(settings.videoSources.Find(x => x.name.Equals(slectedVideoSourceName)));
             }
         }
     }
