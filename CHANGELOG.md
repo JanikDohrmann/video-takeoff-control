@@ -7,14 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Added functionality for storing settings to disk
-- Added functionality for multiple cameras
 
 ### Changed
 
 ### Fixed
 
 ### Removed
+
+## [0.2.0] - 2025-03-28
+### Added
+- Added functionality for storing settings to disk
+- Added functionality for multiple cameras
 
 ## [0.1.0] - 2025-02-24
 ### Added
