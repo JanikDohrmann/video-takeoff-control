@@ -7,20 +7,23 @@ Sie hilft bei der Erkennung von Übertreten am Balken. Außerdem wird durch die 
 ## 2. Installation und Start
 - **Installation**: (Falls erforderlich, Installationsanweisungen einfügen).  
 - **Starten der Anwendung**: Doppelklick auf das Programmsymbol.  
-- **Erste Schritte**: Kamera einrichten und Einstellungen überprüfen.  
+- **Erste Schritte**: Kamera einrichten und Einstellungen überprüfen.
+
+### 2.1 Kamerakonfiguration
+Die Kameras können unter `Datei -> Einstellungen -> Videoquelle` konfiguriert werden.
 
 ## 3. Benutzeroberfläche
 - **Übersicht der Bedienelemente**: Kurze Erklärung der wichtigsten Buttons und Menüpunkte.  
-- **Symbolleiste**: Funktionen wie Start/Stopp der Aufnahme, Zeitlupenmodus, Frame-by-Frame-Analyse.  
+- **Symbolleiste**: Funktionen wie Start/Stopp der Aufnahme, Frame-by-Frame-Analyse.  
 
 ## 4. Ablauf der Videoabsprungkontrolle
 ### 4.1 Kamera-Einrichtung
-- **Auswahl der Kameraquelle** im Einstellungsmenü.  
-- **Optimale Positionierung** für eine klare Sicht auf den Absprungbereich.  
+- **Auswahl der Kameraquelle** über die Menüleiste. Die auswählbaren Kameras müssen vorher in den Einstellungen konfiguriert worden sein.
+- **Optimale Positionierung** für eine klare Sicht auf den Absprungbereich. Die Mitte des Kamerabildes sollte sich auf der Höhe der Platte befinden.
 
-### 4.2 Aufzeichnung und Analyse
+### 4.2 Aufzeichnung und Beurteilung
 - **Starten/Stoppen der Videoaufnahme** über die Steuerleiste.  
-- **Markieren des Absprungzeitpunkts** durch Nutzung der Frame-by-Frame-Funktion.
+- **Beurteilung des Absprungs** durch Nutzung der Frame-by-Frame-Funktion.
 
 ## 6. Häufige Probleme & Lösungen
 
