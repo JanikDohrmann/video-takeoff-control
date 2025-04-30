@@ -95,6 +95,9 @@ namespace video_takeoff_control
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            resetFrameProgress();
+            videoSource.preview();
+
             recordedVideo = new List<BitmapImage>();
             frameCounter = 0;
             recording = true;
@@ -102,6 +105,7 @@ namespace video_takeoff_control
             buttonStopRecord.IsDefault = true;
             buttonStartRecord.IsEnabled = false;
             editCompetitioNameButton.IsEnabled = false;
+            comboActiveVideoSource.IsEnabled = false;
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
@@ -114,15 +118,18 @@ namespace video_takeoff_control
             buttonBack.IsEnabled = true;
             buttonForward.IsEnabled = true;
             buttonStopRecord.IsEnabled = false;
+            buttonStartRecord.IsEnabled = true;
+            buttonStartRecord.IsDefault = true;
             buttonClear.IsEnabled = true;
-            buttonClear.IsDefault = true;
+            editCompetitioNameButton.IsEnabled = true;
+
+            Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), videoSource.getFramerate()));
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {   
             try
             {
-                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), videoSource.getFramerate()));
                 resetFrameProgress();
                 videoSource.preview();
 
@@ -130,9 +137,7 @@ namespace video_takeoff_control
                 buttonForward.IsEnabled = false;
                 buttonStopRecord.IsEnabled = false;
                 buttonClear.IsEnabled = false;
-                buttonStartRecord.IsEnabled = true;
-                buttonStartRecord.IsDefault = true;
-                editCompetitioNameButton.IsEnabled = true;
+                comboActiveVideoSource.IsEnabled = true;
             }
             catch (Exception ex)
             {
