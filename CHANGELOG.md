@@ -9,9 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-
+- Changed functionality of stop and reset button to improve user experience
+  
 ### Fixed
-
+- Fixed jumping focus when scrolling through recording
 ### Removed
 
 ## [0.2.0] - 2025-03-28
