@@ -38,7 +38,11 @@
     <sys:String x:Key="Menu_ActiveCamera" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Aktive Kamera:
     </sys:String>
-    
+
+    <sys:String x:Key="Menu_RecordingTimer" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Timer:
+    </sys:String>
+
     <!--Options Menu-->
     <sys:String x:Key="OptionsMenu_WindowTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Einstellungen

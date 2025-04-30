@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ using System.Windows.Media.Imaging;
 using video_takeoff_control.bitmap_tools;
 using video_takeoff_control.logging;
 using video_takeoff_control.settings;
+using video_takeoff_control.util;
 using video_takeoff_control.video_file_handler;
 using video_takeoff_control.video_source;
 
@@ -35,6 +37,8 @@ namespace video_takeoff_control
         private IVideoFileHandler videoFileHandler;
 
         private static ILogger logger;
+
+        private System.Timers.Timer recordingTimer;
 
         public MainWindow()
         {
@@ -83,6 +87,8 @@ namespace video_takeoff_control
             }
             comboActiveVideoSource.SelectedIndex = 0;
 
+            comboRecordingTimer.SelectedIndex = 0;
+
             buttonBack.IsEnabled = false;
             buttonForward.IsEnabled = false;
             buttonStopRecord.IsEnabled = false;
@@ -95,35 +101,74 @@ namespace video_takeoff_control
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            resetFrameProgress();
-            videoSource.preview();
+            try
+            {
+                resetFrameProgress();
+                videoSource.preview();
 
-            recordedVideo = new List<BitmapImage>();
-            frameCounter = 0;
-            recording = true;
-            buttonStopRecord.IsEnabled = true;
-            buttonStopRecord.IsDefault = true;
-            buttonStartRecord.IsEnabled = false;
-            editCompetitioNameButton.IsEnabled = false;
-            comboActiveVideoSource.IsEnabled = false;
+                recordedVideo = new List<BitmapImage>();
+                frameCounter = 0;
+                recording = true;
+                buttonStopRecord.IsEnabled = true;
+                buttonStopRecord.IsDefault = true;
+                buttonStartRecord.IsEnabled = false;
+                editCompetitioNameButton.IsEnabled = false;
+                comboActiveVideoSource.IsEnabled = false;
+                comboRecordingTimer.IsEnabled = false;
+
+                int recordingTimerDuration = RecordingTimerTools.convertRecordingTimerSelection(comboRecordingTimer.SelectedValue.ToString());
+
+                if (recordingTimerDuration > 0)
+                {
+                    recordingTimer = new System.Timers.Timer(recordingTimerDuration);
+                    recordingTimer.Elapsed += recordingTimerElapsed;
+                    recordingTimer.AutoReset = false;
+                    recordingTimer.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im Start Button: {ex.ToString()}");
+            }
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            recording = false;
+            stop();
+        }
 
-            videoSource.stopRecording();
-            frameCounter = recordedVideo.Count - 1;
-            updateFrameProgress();
-            buttonBack.IsEnabled = true;
-            buttonForward.IsEnabled = true;
-            buttonStopRecord.IsEnabled = false;
-            buttonStartRecord.IsEnabled = true;
-            buttonStartRecord.IsDefault = true;
-            buttonClear.IsEnabled = true;
-            editCompetitioNameButton.IsEnabled = true;
+        private void recordingTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            MainWindow.GetLogger().Log(LogLevel.Debug, $"Timer stopped.");
 
-            Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), videoSource.getFramerate()));
+            Dispatcher.Invoke(() => {
+                stop();
+            });
+        }
+
+        private void stop()
+        {
+            try
+            {
+                recording = false;
+
+                videoSource.stopRecording();
+                frameCounter = recordedVideo.Count - 1;
+                updateFrameProgress();
+                buttonBack.IsEnabled = true;
+                buttonForward.IsEnabled = true;
+                buttonStopRecord.IsEnabled = false;
+                buttonStartRecord.IsEnabled = true;
+                buttonStartRecord.IsDefault = true;
+                buttonClear.IsEnabled = true;
+                editCompetitioNameButton.IsEnabled = true;
+
+                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), videoSource.getFramerate()));
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in stop function: {ex.ToString()}");
+            }
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -138,6 +183,7 @@ namespace video_takeoff_control
                 buttonStopRecord.IsEnabled = false;
                 buttonClear.IsEnabled = false;
                 comboActiveVideoSource.IsEnabled = true;
+                comboRecordingTimer.IsEnabled = true;
             }
             catch (Exception ex)
             {
