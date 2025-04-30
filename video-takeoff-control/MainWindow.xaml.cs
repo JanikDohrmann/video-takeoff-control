@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -381,5 +382,11 @@ namespace video_takeoff_control
                 setupCamera(settings.videoSources.Find(x => x.name.Equals(slectedVideoSourceName)));
             }
         }
+
+        private void openVideoFolder_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", settings.storageFolderPath);
+        }
+        
     }
 }

@@ -37,6 +37,9 @@
                     <ComboBoxItem>8s</ComboBoxItem>
                 </ComboBox>
             </WrapPanel>
+            <WrapPanel Margin="5">
+                <Button Name="buttonOpenVideoFolder" Content="{DynamicResource Menu_OpenVideoFolder}" Click="openVideoFolder_Click"/>
+            </WrapPanel>
         </WrapPanel>
         
         

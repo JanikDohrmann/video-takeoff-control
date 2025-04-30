@@ -42,6 +42,10 @@
     <sys:String x:Key="Menu_RecordingTimer" xmlns:sys="clr-namespace:System;assembly=mscorlib">
         Timer:
     </sys:String>
+    
+    <sys:String x:Key="Menu_OpenVideoFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Videos
+    </sys:String>
 
     <!--Options Menu-->
     <sys:String x:Key="OptionsMenu_WindowTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">
