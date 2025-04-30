@@ -16,6 +16,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed jumping focus when scrolling through recording
 ### Removed
 
+## [0.3.0] - 2025-04-30
+### Added
+- Added recording timer
+- Added button to open video storage folder
+- 
+### Changed
+- Changed functionality of stop and reset button to improve user experience
+  
+### Fixed
+- Fixed jumping focus when scrolling through recording
+
 ## [0.2.0] - 2025-03-28
 ### Added
 - Added functionality for storing settings to disk
