@@ -22,9 +22,10 @@ namespace video_takeoff_control.video_file_handler
         {
             try
             {
-                if(!Directory.Exists(settings.storageFolderPath))
+                string storageFolder = Path.Combine(settings.storageFolderPath, settings.competitionName);
+                if(!Directory.Exists(storageFolder))
                 {
-                    Directory.CreateDirectory(settings.storageFolderPath);
+                    Directory.CreateDirectory(storageFolder);
                 }
 
                 MainWindow.GetLogger().Log(LogLevel.Debug, "Framerate: " + framerate);
@@ -46,6 +47,7 @@ namespace video_takeoff_control.video_file_handler
                 }
 
                 aviWriter.Close();
+                settings.attemptNumber++;
                 MainWindow.GetLogger().Log(LogLevel.Information, "Video written");
             }
             catch (Exception e)

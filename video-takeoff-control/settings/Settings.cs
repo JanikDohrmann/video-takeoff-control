@@ -28,6 +28,7 @@ namespace video_takeoff_control.settings
 
         //Competition
         public string competitionName { get; set; }
+        public int attemptNumber { get; set; }
 
         //Video Source
         public List<VideoSourceSettings> videoSources { get; set; }
@@ -47,6 +48,7 @@ namespace video_takeoff_control.settings
                 centerControlLine = false,
                 storageFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control", "recordings"),
                 competitionName = "Wettkampfname",
+                attemptNumber = 0,
                 videoSources = new List<VideoSourceSettings>(),
             };
 

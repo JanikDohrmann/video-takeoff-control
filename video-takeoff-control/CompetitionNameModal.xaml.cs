@@ -34,6 +34,7 @@ namespace video_takeoff_control
         private void saveCompetitionName_Click(object sender, RoutedEventArgs e)
         {
             settings.competitionName = textCompetitionName.Text;
+            settings.attemptNumber = 0;
             _mainWindow.updateCompetitionName();
             Settings.storeSettings(settings);
             this.Close();

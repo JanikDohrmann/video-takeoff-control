@@ -164,7 +164,7 @@ namespace video_takeoff_control
                 buttonClear.IsEnabled = true;
                 editCompetitioNameButton.IsEnabled = true;
 
-                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), videoSource.getFramerate()));
+                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName, settings.attemptNumber), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), videoSource.getFramerate()));
             }
             catch (Exception ex)
             {

@@ -9,9 +9,9 @@ namespace video_takeoff_control.video_file_handler
 {
     public class FileNameBuilder
     {
-        public static string buildFileName(string folderpath, string competitionName)
+        public static string buildFileName(string folderpath, string competitionName, int attemptNumber)
         {
-            string filename = Path.Combine(folderpath, string.Format("Video_{0}_{1}.avi", competitionName.Replace(" ", "-"), DateTime.Now.ToString("yyyy'-'MM'-'dd'T'mmhhss")));
+            string filename = Path.Combine(folderpath, competitionName, string.Format("{0}_Video_{1}_{2}.avi", attemptNumber, competitionName.Replace(" ", "-"), DateTime.Now.ToString("yyyy'-'MM'-'dd'T'hhmmss")));
 
             return filename;
         }
