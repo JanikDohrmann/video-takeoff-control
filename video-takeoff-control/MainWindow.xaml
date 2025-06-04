@@ -32,9 +32,10 @@
                 <TextBlock Text="{DynamicResource Menu_RecordingTimer}" />
                 <ComboBox Name="comboRecordingTimer" Width="50" Margin="5,0,5,0"  SelectedValuePath="Content">
                     <ComboBoxItem>-</ComboBoxItem>
-                    <ComboBoxItem>3s</ComboBoxItem>
                     <ComboBoxItem>5s</ComboBoxItem>
                     <ComboBoxItem>8s</ComboBoxItem>
+                    <ComboBoxItem>11s</ComboBoxItem>
+                    <ComboBoxItem>13s</ComboBoxItem>
                 </ComboBox>
             </WrapPanel>
             <WrapPanel Margin="5">

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Changed filenames of videos to include attempt number
 - Changed folder structure for videos
+- Changed timer duration selection
   
 ### Fixed
 - Fixed wrong structure of timestamp for video files
