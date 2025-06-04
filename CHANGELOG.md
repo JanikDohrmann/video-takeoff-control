@@ -7,20 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Added recording timer
-- Added button to open video storage folder
+
 ### Changed
-- Changed functionality of stop and reset button to improve user experience
+- Changed filenames of videos to include attempt number
+- Changed folder structure for videos
   
 ### Fixed
-- Fixed jumping focus when scrolling through recording
+- Fixed wrong structure of timestamp for video files
+
 ### Removed
 
 ## [0.3.0] - 2025-04-30
 ### Added
 - Added recording timer
 - Added button to open video storage folder
-- 
+
 ### Changed
 - Changed functionality of stop and reset button to improve user experience
   
