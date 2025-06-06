@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+  
+### Fixed
+
+### Removed
+
+## [0.4.0] - 2025-06-06
+### Added
+- Added support for loading videos from file
+
+### Changed
 - Changed filenames of videos to include attempt number
 - Changed folder structure for videos
 - Changed timer duration selection
@@ -16,8 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed wrong structure of timestamp for video files
 - Fixed control line color settings
-
-### Removed
 
 ## [0.3.0] - 2025-04-30
 ### Added
