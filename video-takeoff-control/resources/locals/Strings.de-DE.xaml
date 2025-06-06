@@ -44,7 +44,11 @@
     </sys:String>
     
     <sys:String x:Key="Menu_OpenVideoFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-        Videos
+        Videoordner öffnen
+    </sys:String>
+
+    <sys:String x:Key="Menu_LoadVideo" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+        Video öffnen
     </sys:String>
 
     <!--Options Menu-->

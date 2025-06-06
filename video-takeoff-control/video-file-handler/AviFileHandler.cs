@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using video_takeoff_control.logging;
 using video_takeoff_control.settings;
+using OpenCvSharp;
 
 namespace video_takeoff_control.video_file_handler
 {
@@ -28,7 +29,7 @@ namespace video_takeoff_control.video_file_handler
                     Directory.CreateDirectory(storageFolder);
                 }
 
-                MainWindow.GetLogger().Log(LogLevel.Debug, "Framerate: " + framerate);
+                MainWindow.GetLogger().Log(logging.LogLevel.Debug, "Framerate: " + framerate);
 
                 AviWriter aviWriter = new AviWriter(filename)
                 {
@@ -48,12 +49,48 @@ namespace video_takeoff_control.video_file_handler
 
                 aviWriter.Close();
                 settings.attemptNumber++;
-                MainWindow.GetLogger().Log(LogLevel.Information, "Video written");
+                MainWindow.GetLogger().Log(logging.LogLevel.Information, "Video written");
             }
             catch (Exception e)
             {
                 MainWindow.GetLogger().LogException(e);
             }         
+        }
+
+        public List<Bitmap> loadVideo(string filePath)
+        {
+            MainWindow.GetLogger().Log(logging.LogLevel.Debug, "Start loading video");
+            List<Bitmap> bitmaps = new List<Bitmap>();
+            try
+            {
+                if (!File.Exists(filePath))
+                {
+                    throw new FileNotFoundException();
+                }
+
+                using VideoCapture capture = new VideoCapture(filePath);
+                if (!capture.IsOpened())
+                {
+                    throw new Exception("Unable to open video file.");
+                }
+
+                using Mat mat = new Mat();
+                while (capture.Read(mat))
+                {
+                    if (mat.Empty())
+                        break;
+
+                    Bitmap bmp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(mat.Clone());
+                    bitmaps.Add(bmp);
+                }
+                MainWindow.GetLogger().Log(logging.LogLevel.Information, "Video read");
+                return bitmaps;
+            }
+            catch (Exception e)
+            {
+                MainWindow.GetLogger().LogException(e);
+                return bitmaps;
+            }
         }
     }
 }

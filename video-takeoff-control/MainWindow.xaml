@@ -8,29 +8,29 @@
         Title="{DynamicResource Common_ApplicationTitle}" Height="450" Width="800" Icon="/vtc_icon.jpg">
     <DockPanel LastChildFill="True"  Background="LightGray">
         <Menu DockPanel.Dock="Top" Name="menuProgram"  Background="LightGray">
-            <MenuItem Header="{DynamicResource Menu_File}">
-                <MenuItem Header="{DynamicResource Menu_File_Options}" Click="openOptionsMenu_Click"/>
-                <MenuItem Header="{DynamicResource Menu_File_Close}" Click="close_Click"/>
+            <MenuItem Header="{DynamicResource Menu_File}" Focusable="False">
+                <MenuItem Header="{DynamicResource Menu_File_Options}" Click="openOptionsMenu_Click" Focusable="False"/>
+                <MenuItem Header="{DynamicResource Menu_File_Close}" Click="close_Click" Focusable="False"/>
             </MenuItem>
-            <MenuItem Header="{DynamicResource Menu_Help}">
-                <MenuItem Header="{DynamicResource Menu_Help_About}" Click="openAboutWindow_Click"/>
+            <MenuItem Header="{DynamicResource Menu_Help}" Focusable="False">
+                <MenuItem Header="{DynamicResource Menu_Help_About}" Click="openAboutWindow_Click" Focusable="False"/>
             </MenuItem>
         </Menu>
         <WrapPanel DockPanel.Dock="Top">
             <WrapPanel Name="panelCompetitionInfo" Margin="5" Background="LightGray">
                 <TextBlock Text="{DynamicResource CompetitionDetails_CompetitioName}" Margin="8,0,5,0"/>
                 <TextBox Name="textCompetitionName" Text="{DynamicResource CompetitionDetails_CompetitioName_DefaultText}" Width="200" Margin="5,0,5,0" IsEnabled="False"/>
-                <Button x:Name="editCompetitioNameButton" Content="{DynamicResource CompetitionDetails_CompetitioName_Edit}" Click="openCompetitionModal_Click"/>
+                <Button x:Name="editCompetitioNameButton" Content="{DynamicResource CompetitionDetails_CompetitioName_Edit}" Click="openCompetitionModal_Click" Focusable="False"/>
             </WrapPanel>
             <WrapPanel Margin="5">
                 <TextBlock Text="{DynamicResource Menu_ActiveCamera}" />
-                <ComboBox Name="comboActiveVideoSource" Width="200" SelectionChanged="comboActiveVideoSource_Selected" Margin="5,0,5,0"  SelectedValuePath="Content">
+                <ComboBox Name="comboActiveVideoSource" Width="200" SelectionChanged="comboActiveVideoSource_Selected" Margin="5,0,5,0"  SelectedValuePath="Content" Focusable="False">
                     
                 </ComboBox>
             </WrapPanel>
             <WrapPanel Margin="5">
                 <TextBlock Text="{DynamicResource Menu_RecordingTimer}" />
-                <ComboBox Name="comboRecordingTimer" Width="50" Margin="5,0,5,0"  SelectedValuePath="Content">
+                <ComboBox Name="comboRecordingTimer" Width="50" Margin="5,0,5,0"  SelectedValuePath="Content" Focusable="False">
                     <ComboBoxItem>-</ComboBoxItem>
                     <ComboBoxItem>5s</ComboBoxItem>
                     <ComboBoxItem>8s</ComboBoxItem>
@@ -39,7 +39,8 @@
                 </ComboBox>
             </WrapPanel>
             <WrapPanel Margin="5">
-                <Button Name="buttonOpenVideoFolder" Content="{DynamicResource Menu_OpenVideoFolder}" Click="openVideoFolder_Click"/>
+                <Button Name="buttonOpenVideoFolder" Content="{DynamicResource Menu_OpenVideoFolder}" Click="openVideoFolder_Click" Focusable="False"/>
+                <Button Name="buttonLoadVideo" Content="{DynamicResource Menu_LoadVideo}" Click="openLoadVideo_Click" Margin="5,0,0,0" Focusable="False"/>
             </WrapPanel>
         </WrapPanel>
         
