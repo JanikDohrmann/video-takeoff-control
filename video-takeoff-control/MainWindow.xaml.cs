@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -302,8 +303,6 @@ namespace video_takeoff_control
         {
             base.OnKeyDown(e);
 
-            int newFrameCounter = frameCounter;
-
             switch (e.Key)
             {
                 case Key.Left:
@@ -387,6 +386,41 @@ namespace video_takeoff_control
         {
             Process.Start("explorer.exe", settings.storageFolderPath);
         }
-        
+
+        private void openLoadVideo_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = settings.storageFolderPath;
+            openFileDialog.Title = "Select Video";
+            openFileDialog.Filter = "Videos (*.avi)|*.avi";
+
+            if (openFileDialog.ShowDialog() == true && openFileDialog.FileName.EndsWith(".avi", StringComparison.OrdinalIgnoreCase))
+            {
+                string filepath = openFileDialog.FileName;
+
+                List<Bitmap> videoFrameBitmampList = videoFileHandler.loadVideo(filepath);
+                List<BitmapImage> loadedVideo = videoFrameBitmampList.Select(x => BitmapConversions.bitmap2BitmapImage(x)).ToList();
+
+                if (loadedVideo != null)
+                {
+                    recordedVideo = loadedVideo;
+                    frameCounter = recordedVideo.Count - 1;
+                    updateFrameProgress();
+                    Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[frameCounter]));
+
+                    comboActiveVideoSource.IsEnabled = false;
+                    comboRecordingTimer.IsEnabled = false;
+
+                    videoSource.stopRecording();
+                    buttonBack.IsEnabled = true;
+                    buttonForward.IsEnabled = true;
+                    buttonStopRecord.IsEnabled = false;
+                    buttonStartRecord.IsEnabled = true;
+                    buttonStartRecord.IsDefault = true;
+                    buttonClear.IsEnabled = true;
+                    editCompetitioNameButton.IsEnabled = true;
+                }
+            }
+        }
     }
 }
