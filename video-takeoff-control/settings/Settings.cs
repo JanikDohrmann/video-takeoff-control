@@ -18,7 +18,7 @@ namespace video_takeoff_control.settings
         public int controlLineX { get; set; }
         public int controlLineY { get; set; }
         public int controlLineWidth { get; set; }
-        public System.Drawing.Color controlLineColor { get; set; }
+        public string controlLineColor { get; set; }
         public bool showVerticalControlLine { get; set; }
         public bool showHorizontalControlLine { get; set; }
         public bool centerControlLine { get; set; }
@@ -42,7 +42,7 @@ namespace video_takeoff_control.settings
                 controlLineX = 0,
                 controlLineY = 0,
                 controlLineWidth = 5,
-                controlLineColor = System.Drawing.Color.Red,
+                controlLineColor = System.Drawing.Color.Red.Name,
                 showVerticalControlLine = true,
                 showHorizontalControlLine = false,
                 centerControlLine = false,
@@ -51,6 +51,7 @@ namespace video_takeoff_control.settings
                 attemptNumber = 0,
                 videoSources = new List<VideoSourceSettings>(),
             };
+
 
             if (File.Exists(SETTINGS_STORAGE_PATH))
             {

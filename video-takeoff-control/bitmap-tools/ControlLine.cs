@@ -9,7 +9,7 @@ namespace video_takeoff_control
         {
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
-                Pen pen = new Pen(settings.controlLineColor, settings.controlLineWidth);
+                Pen pen = new Pen(Color.FromName(settings.controlLineColor), settings.controlLineWidth);
 
                 if(settings.centerControlLine)
                 {

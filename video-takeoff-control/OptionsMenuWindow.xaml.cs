@@ -38,11 +38,10 @@ namespace video_takeoff_control
             checkShowVerticalControlLine.IsChecked = settings.showVerticalControlLine;
             checkShowHorizontalControlLine.IsChecked = settings.showHorizontalControlLine;
             checkCenterControlLine.IsChecked = settings.centerControlLine;
-            
-            List<String> controlLineColorOptions = new List<String>();
-            controlLineColorOptions.Add(settings.controlLineColor.Name);
+
+            List<string> controlLineColorOptions = new List<string> { "Red", "Blue", "Yellow", "Green", "Black" };
             comboControlLineColor.ItemsSource = controlLineColorOptions;
-            comboControlLineColor.SelectedIndex = 0;
+            comboControlLineColor.SelectedIndex = controlLineColorOptions.IndexOf(settings.controlLineColor);
 
             textVideoStoragePath.Text = settings.storageFolderPath;
 
@@ -167,6 +166,9 @@ namespace video_takeoff_control
             settings.showVerticalControlLine = checkShowVerticalControlLine.IsChecked.GetValueOrDefault(true);
             settings.showHorizontalControlLine = checkShowHorizontalControlLine.IsChecked.GetValueOrDefault(true);
             settings.centerControlLine = checkCenterControlLine.IsChecked.GetValueOrDefault(false);
+
+            settings.controlLineColor = comboControlLineColor.Text;
+
             Settings.storeSettings(settings);
             _mainWindow.setup(settings);
         }

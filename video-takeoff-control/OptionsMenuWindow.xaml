@@ -94,7 +94,7 @@
                     </WrapPanel>
                     <WrapPanel Margin="0,5,0,5">
                         <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_ColourHeader}" Margin="0,0,10,0" Width="200"></TextBlock>
-                        <ComboBox Name="comboControlLineColor" Width="100" IsEnabled="False"></ComboBox>
+                        <ComboBox Name="comboControlLineColor" Width="100" IsEnabled="True"></ComboBox>
                     </WrapPanel>
                 </StackPanel>
                 <Button DockPanel.Dock="Bottom" Name="buttonChangeControlLine" Content="{DynamicResource Common_Save}" Width="50" Click="ChangeControlLine_Click" HorizontalAlignment="Right" Margin="20,10,20,10"/>
