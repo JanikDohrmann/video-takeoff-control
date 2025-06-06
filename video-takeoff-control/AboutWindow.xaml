@@ -9,7 +9,7 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
             <TextBlock Text="{DynamicResource Common_ApplicationTitle}"/>
-            <TextBlock Text="Version 0.3.0"/>
+            <TextBlock Text="Version 0.4.0"/>
         </StackPanel>
     </DockPanel>
 </Window>
