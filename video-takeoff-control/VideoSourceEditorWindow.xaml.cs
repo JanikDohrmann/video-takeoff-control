@@ -25,8 +25,9 @@ namespace video_takeoff_control
     public partial class VideoSourceEditorWindow : Window
     {
         private Settings settings;
-        private VideoSourceSettings videoSourceSettings;
-        private OptionsMenuWindow optionsMenuWindow;
+        private VideoSourceSettings? videoSourceSettings;
+        private OptionsMenuWindow? optionsMenuWindow;
+        private Action? updateVideoSourcesCallback;
 
         private FilterInfoCollection videoDevices;
 
@@ -34,6 +35,7 @@ namespace video_takeoff_control
         {
             this.settings = settings;
             this.optionsMenuWindow = optionsMenuWindow;
+            this.updateVideoSourcesCallback = optionsMenuWindow.updateUIVideoSourcesList;
             InitializeComponent();
 
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -48,6 +50,7 @@ namespace video_takeoff_control
         {
             this.settings = settings;
             this.optionsMenuWindow = optionsMenuWindow;
+            this.updateVideoSourcesCallback = optionsMenuWindow.updateUIVideoSourcesList;
             this.videoSourceSettings = videoSourceSettings;
             InitializeComponent();
 
@@ -62,7 +65,46 @@ namespace video_takeoff_control
             {
                 comboVideoSourceWebcamSelect.Items.Add(videoDevice.Name + " | " + MonikerStringParser.parseDevicePath(videoDevice.MonikerString));
 
-                if(videoSourceSettings.deviceAddress.Equals(videoDevice.MonikerString))
+                if (!string.IsNullOrEmpty(videoSourceSettings.deviceAddress) && videoSourceSettings.deviceAddress.Equals(videoDevice.MonikerString))
+                {
+                    comboVideoSourceWebcamSelect.SelectedItem = videoDevice.Name + " | " + MonikerStringParser.parseDevicePath(videoDevice.MonikerString);
+                }
+            }
+        }
+
+        public VideoSourceEditorWindow(Settings settings, Action updateVideoSourcesCallback)
+        {
+            this.settings = settings;
+            this.updateVideoSourcesCallback = updateVideoSourcesCallback;
+            InitializeComponent();
+
+            videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+            foreach (FilterInfo videoDevice in videoDevices)
+            {
+                comboVideoSourceWebcamSelect.Items.Add(videoDevice.Name + " | " + MonikerStringParser.parseDevicePath(videoDevice.MonikerString));
+            }
+        }
+
+        public VideoSourceEditorWindow(Settings settings, Action updateVideoSourcesCallback, VideoSourceSettings videoSourceSettings)
+        {
+            this.settings = settings;
+            this.updateVideoSourcesCallback = updateVideoSourcesCallback;
+            this.videoSourceSettings = videoSourceSettings;
+            InitializeComponent();
+
+            textCameraName.Text = videoSourceSettings.name;
+            comboVideoSourceType.SelectedValue = videoSourceSettings.videoSourceType;
+            textHttpCameraUrl.Text = videoSourceSettings.hostname;
+            textFramerate.Text = videoSourceSettings.framerate.ToString();
+
+            videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+            foreach (FilterInfo videoDevice in videoDevices)
+            {
+                comboVideoSourceWebcamSelect.Items.Add(videoDevice.Name + " | " + MonikerStringParser.parseDevicePath(videoDevice.MonikerString));
+
+                if (!string.IsNullOrEmpty(videoSourceSettings.deviceAddress) && videoSourceSettings.deviceAddress.Equals(videoDevice.MonikerString))
                 {
                     comboVideoSourceWebcamSelect.SelectedItem = videoDevice.Name + " | " + MonikerStringParser.parseDevicePath(videoDevice.MonikerString);
                 }
@@ -80,18 +122,18 @@ namespace video_takeoff_control
                     string hostname = textHttpCameraUrl.Text;
                     int framerate = Convert.ToInt32(textFramerate.Text);
 
-                    string webcamSelect = comboVideoSourceWebcamSelect.SelectedItem.ToString();
-
                     videoSourceSettings.name = cameraName;
                     videoSourceSettings.framerate = framerate;
                     videoSourceSettings.hostname = hostname;
                     videoSourceSettings.videoSourceType = videoSourceType;
-                    foreach(FilterInfo videoDevice in videoDevices)
+
+                    if (videoSourceType == VideoSourceType.Webcam)
                     {
-                        if(videoDevice.MonikerString.Contains(webcamSelect.Substring(webcamSelect.IndexOf(" | ") + 3)))
-                        {
-                            videoSourceSettings.deviceAddress = videoDevice.MonikerString;
-                        }
+                        videoSourceSettings.deviceAddress = getSelectedWebcamDeviceAddress();
+                    }
+                    else
+                    {
+                        videoSourceSettings.deviceAddress = string.Empty;
                     }
                 }
                 else
@@ -101,18 +143,10 @@ namespace video_takeoff_control
                     string hostname = textHttpCameraUrl.Text;
                     int framerate = Convert.ToInt32(textFramerate.Text);
                     
-                    string deviceAddress = "";
-                    string webcamSelect = comboVideoSourceWebcamSelect.SelectedItem.ToString();
-                    foreach (FilterInfo videoDevice in videoDevices)
-                    {
-                        if (videoDevice.MonikerString.Contains(webcamSelect.Substring(webcamSelect.IndexOf(" | ") + 3)))
-                        {
-                            deviceAddress = videoDevice.MonikerString;
-                        }
-                    }
+                    string deviceAddress = videoSourceType == VideoSourceType.Webcam ? getSelectedWebcamDeviceAddress() : string.Empty;
                     settings.videoSources.Add(new VideoSourceSettings(cameraName, videoSourceType, hostname, framerate, deviceAddress));
                 }
-                optionsMenuWindow.updateUIVideoSourcesList();
+                updateVideoSourcesCallback?.Invoke();
                 this.Close();
             }
             catch (Exception ex)
@@ -120,6 +154,26 @@ namespace video_takeoff_control
                 MainWindow.GetLogger().Log(LogLevel.Error, $"Fehler im SaveVideoSource_Click Button: {ex.ToString()}");
             }
 
+        }
+
+        private string getSelectedWebcamDeviceAddress()
+        {
+            string? webcamSelect = comboVideoSourceWebcamSelect.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(webcamSelect))
+            {
+                return string.Empty;
+            }
+
+            string deviceIdentifier = webcamSelect.Substring(webcamSelect.IndexOf(" | ") + 3);
+            foreach (FilterInfo videoDevice in videoDevices)
+            {
+                if (videoDevice.MonikerString.Contains(deviceIdentifier))
+                {
+                    return videoDevice.MonikerString;
+                }
+            }
+
+            return string.Empty;
         }
     }
 }

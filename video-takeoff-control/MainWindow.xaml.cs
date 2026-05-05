@@ -42,6 +42,13 @@ namespace video_takeoff_control
 
         private System.Timers.Timer recordingTimer;
 
+        private const string VideoStatusNoSource = "NO SOURCE";
+        private const string VideoStatusLive = "LIVE";
+        private const string VideoStatusRecording = "REC";
+        private const string VideoStatusPlayback = "PLAYBACK";
+        private const string VideoStatusFile = "FILE";
+        private const string VideoStatusLoading = "LOADING";
+
         public MainWindow()
         {
             string logpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "video-takeoff-control", "logs");
@@ -87,7 +94,10 @@ namespace video_takeoff_control
             {
                 comboActiveVideoSource.Items.Add(videoSourceSettings.name);
             }
-            comboActiveVideoSource.SelectedIndex = 0;
+            if (comboActiveVideoSource.Items.Count > 0)
+            {
+                comboActiveVideoSource.SelectedIndex = 0;
+            }
 
             comboRecordingTimer.SelectedIndex = 0;
 
@@ -95,10 +105,13 @@ namespace video_takeoff_control
             buttonForward.IsEnabled = false;
             buttonStopRecord.IsEnabled = false;
             buttonClear.IsEnabled = false;
+            buttonStartRecord.IsEnabled = videoSource != null;
+            updateVideoStatus(videoSource != null ? VideoStatusLive : VideoStatusNoSource);
 
             updateCompetitionName();
 
             videoFileHandler = new AviFileHandler(settings);
+            populateSettingsDrawer();
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -106,7 +119,14 @@ namespace video_takeoff_control
             try
             {
                 resetFrameProgress();
+                if (videoSource == null)
+                {
+                    MainWindow.GetLogger().Log(LogLevel.Warning, "Recording could not be started because no video source is configured.");
+                    return;
+                }
+
                 videoSource.preview();
+                updateVideoStatus(VideoStatusRecording);
 
                 recordedVideo = new List<BitmapImage>();
                 frameCounter = 0;
@@ -154,18 +174,28 @@ namespace video_takeoff_control
             {
                 recording = false;
 
-                videoSource.stopRecording();
-                frameCounter = recordedVideo.Count - 1;
+                videoSource?.stopRecording();
+                frameCounter = recordedVideo.Count > 0 ? recordedVideo.Count - 1 : 0;
                 updateFrameProgress();
-                buttonBack.IsEnabled = true;
-                buttonForward.IsEnabled = true;
+                buttonBack.IsEnabled = recordedVideo.Count > 0;
+                buttonForward.IsEnabled = recordedVideo.Count > 0;
                 buttonStopRecord.IsEnabled = false;
-                buttonStartRecord.IsEnabled = true;
+                buttonStartRecord.IsEnabled = videoSource != null;
                 buttonStartRecord.IsDefault = true;
                 buttonClear.IsEnabled = true;
                 editCompetitioNameButton.IsEnabled = true;
 
-                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName, settings.attemptNumber), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), videoSource.getFramerate()));
+                if (recordedVideo.Count == 0)
+                {
+                    MainWindow.GetLogger().Log(LogLevel.Warning, "Recording stopped without captured frames. No video file was written.");
+                    updateVideoStatus(videoSource != null ? VideoStatusLive : VideoStatusNoSource);
+                    return;
+                }
+
+                updateVideoStatus(VideoStatusPlayback);
+
+                int framerate = videoSource?.getFramerate() ?? 0;
+                Task.Run(() => videoFileHandler.saveVideo(FileNameBuilder.buildFileName(settings.storageFolderPath, settings.competitionName, settings.attemptNumber), recordedVideo.Select(x => BitmapConversions.bitmapImage2Bitmap(x)).ToList(), framerate));
             }
             catch (Exception ex)
             {
@@ -178,7 +208,8 @@ namespace video_takeoff_control
             try
             {
                 resetFrameProgress();
-                videoSource.preview();
+                videoSource?.preview();
+                updateVideoStatus(videoSource != null ? VideoStatusLive : VideoStatusNoSource);
 
                 buttonBack.IsEnabled = false;
                 buttonForward.IsEnabled = false;
@@ -186,6 +217,7 @@ namespace video_takeoff_control
                 buttonClear.IsEnabled = false;
                 comboActiveVideoSource.IsEnabled = true;
                 comboRecordingTimer.IsEnabled = true;
+                buttonStartRecord.IsEnabled = videoSource != null;
             }
             catch (Exception ex)
             {
@@ -205,6 +237,12 @@ namespace video_takeoff_control
 
         private void moveFrame(int step)
         {
+            if (recordedVideo == null || recordedVideo.Count == 0)
+            {
+                resetFrameProgress();
+                return;
+            }
+
             if(step > 0) 
             {
                 int newFrameCounter = frameCounter < recordedVideo.Count - 1 ? frameCounter + step : recordedVideo.Count - 1;
@@ -223,6 +261,12 @@ namespace video_takeoff_control
 
         private void updateFrameProgress()
         {
+            if (recordedVideo == null || recordedVideo.Count <= 1)
+            {
+                framePogress.Value = 0;
+                return;
+            }
+
             int maxFrames = recordedVideo.Count - 1;
 
             double progress = ((double)frameCounter / maxFrames) * 100;
@@ -235,9 +279,25 @@ namespace video_takeoff_control
             framePogress.Value = 0;
         }
 
+        private void updateVideoStatus(string status)
+        {
+            if (textVideoStatus != null)
+            {
+                textVideoStatus.Text = status;
+            }
+        }
+
+        private void updateLoadingVideoOverlay(bool isLoading)
+        {
+            if (loadingVideoOverlay != null)
+            {
+                loadingVideoOverlay.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         protected override void OnClosed(EventArgs e)
         {
-            videoSource.close();
+            videoSource?.close();
 
             foreach(Window window in childWindows)
             {
@@ -253,13 +313,203 @@ namespace video_takeoff_control
         {
             try
             {
-                OptionsMenuWindow optionsMenuWindow = new OptionsMenuWindow(this, settings);
-                childWindows.Add(optionsMenuWindow);
-                optionsMenuWindow.Show();
+                toggleSettingsDrawer();
             }
             catch (Exception ex)
             {
                 MainWindow.GetLogger().Log(LogLevel.Error, $"Error in openOptionsMenu Button: {ex.ToString()}");
+            }
+        }
+
+        private void toggleSettingsDrawer()
+        {
+            if (settingsDrawer == null)
+            {
+                return;
+            }
+
+            if (settingsDrawer.Visibility == Visibility.Visible)
+            {
+                settingsDrawer.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            populateSettingsDrawer();
+            settingsDrawer.Visibility = Visibility.Visible;
+        }
+
+        private void closeSettingsDrawer_Click(object sender, RoutedEventArgs e)
+        {
+            settingsDrawer.Visibility = Visibility.Collapsed;
+        }
+
+        private void populateSettingsDrawer()
+        {
+            if (comboDrawerLanguage == null || settings == null)
+            {
+                return;
+            }
+
+            comboDrawerLanguage.SelectedValue = settings.uiCulture;
+            textDrawerVerticalControlLinePosition.Text = settings.controlLineX.ToString();
+            textDrawerHorizontalControlLinePosition.Text = settings.controlLineY.ToString();
+            textDrawerControlLineWidth.Text = settings.controlLineWidth.ToString();
+            checkDrawerShowVerticalControlLine.IsChecked = settings.showVerticalControlLine;
+            checkDrawerShowHorizontalControlLine.IsChecked = settings.showHorizontalControlLine;
+            checkDrawerCenterControlLine.IsChecked = settings.centerControlLine;
+
+            List<string> controlLineColorOptions = new List<string> { "Red", "Blue", "Yellow", "Green", "Black" };
+            comboDrawerControlLineColor.ItemsSource = controlLineColorOptions;
+            comboDrawerControlLineColor.SelectedItem = settings.controlLineColor;
+
+            textDrawerVideoStoragePath.Text = settings.storageFolderPath;
+            refreshDrawerVideoSources();
+        }
+
+        private void refreshDrawerVideoSources()
+        {
+            if (listDrawerVideoSources == null || settings == null)
+            {
+                return;
+            }
+
+            listDrawerVideoSources.ItemsSource = null;
+            listDrawerVideoSources.ItemsSource = settings.videoSources;
+        }
+
+        private void setupAndKeepSettingsDrawerOpen()
+        {
+            setup(settings);
+            if (settingsDrawer != null)
+            {
+                settingsDrawer.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void SaveDrawerCommon_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string culture = comboDrawerLanguage.SelectedValue?.ToString() ?? settings.uiCulture;
+                settings.uiCulture = culture;
+                App.ChangeLanguage(culture);
+
+                Settings.storeSettings(settings);
+                setupAndKeepSettingsDrawerOpen();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in SaveDrawerCommon Button: {ex.ToString()}");
+            }
+        }
+
+        private void SaveDrawerControlLine_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (int.TryParse(textDrawerVerticalControlLinePosition.Text, out int verticalControlLinePosition))
+                {
+                    settings.controlLineX = verticalControlLinePosition;
+                }
+
+                if (int.TryParse(textDrawerHorizontalControlLinePosition.Text, out int horizontalControlLinePosition))
+                {
+                    settings.controlLineY = horizontalControlLinePosition;
+                }
+
+                if (int.TryParse(textDrawerControlLineWidth.Text, out int controlLineWidth))
+                {
+                    settings.controlLineWidth = controlLineWidth;
+                }
+
+                settings.showVerticalControlLine = checkDrawerShowVerticalControlLine.IsChecked.GetValueOrDefault(true);
+                settings.showHorizontalControlLine = checkDrawerShowHorizontalControlLine.IsChecked.GetValueOrDefault(true);
+                settings.centerControlLine = checkDrawerCenterControlLine.IsChecked.GetValueOrDefault(false);
+                settings.controlLineColor = comboDrawerControlLineColor.Text;
+
+                Settings.storeSettings(settings);
+                setupAndKeepSettingsDrawerOpen();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in SaveDrawerControlLine Button: {ex.ToString()}");
+            }
+        }
+
+        private void SaveDrawerVideoStorage_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                settings.storageFolderPath = textDrawerVideoStoragePath.Text;
+
+                Settings.storeSettings(settings);
+                setupAndKeepSettingsDrawerOpen();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in SaveDrawerVideoStorage Button: {ex.ToString()}");
+            }
+        }
+
+        private void AddDrawerVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                VideoSourceEditorWindow videoSourceEditorWindow = new VideoSourceEditorWindow(settings, refreshDrawerVideoSources);
+                childWindows.Add(videoSourceEditorWindow);
+                videoSourceEditorWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in AddDrawerVideoSource Button: {ex.ToString()}");
+            }
+        }
+
+        private void EditDrawerVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int index = listDrawerVideoSources.SelectedIndex;
+                if (index >= 0)
+                {
+                    VideoSourceEditorWindow videoSourceEditorWindow = new VideoSourceEditorWindow(settings, refreshDrawerVideoSources, settings.videoSources[index]);
+                    childWindows.Add(videoSourceEditorWindow);
+                    videoSourceEditorWindow.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in EditDrawerVideoSource Button: {ex.ToString()}");
+            }
+        }
+
+        private void RemoveDrawerVideoSource_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int index = listDrawerVideoSources.SelectedIndex;
+                if (index >= 0)
+                {
+                    settings.videoSources.RemoveAt(index);
+                    refreshDrawerVideoSources();
+                }
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in RemoveDrawerVideoSource Button: {ex.ToString()}");
+            }
+        }
+
+        private void SaveDrawerVideoSources_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Settings.storeSettings(settings);
+                setupAndKeepSettingsDrawerOpen();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.GetLogger().Log(LogLevel.Error, $"Error in SaveDrawerVideoSources Button: {ex.ToString()}");
             }
         }
 
@@ -327,10 +577,16 @@ namespace video_takeoff_control
             textCompetitionName.Text = settings.competitionName;
         }
 
-        public void setupCamera(VideoSourceSettings videoSourceSettings)
+        public void setupCamera(VideoSourceSettings? videoSourceSettings)
         {
             try
             {
+                if (videoSourceSettings == null)
+                {
+                    MainWindow.GetLogger().Log(LogLevel.Warning, "Camera setup skipped because no video source settings were provided.");
+                    return;
+                }
+
                 if (videoSource != null)
                 {
                     videoSource.close();
@@ -344,11 +600,13 @@ namespace video_takeoff_control
                         MainWindow.GetLogger().Log(LogLevel.Debug, "Creating new webcam video source");
                         videoSource = new WebcamSource(this, videoSourceSettings.deviceAddress, videoSourceSettings.framerate);
                         videoSource.preview();
+                        updateVideoStatus(VideoStatusLive);
                         break;
                     case VideoSourceType.SimpleHttpCamera:
                         MainWindow.GetLogger().Log(LogLevel.Debug, "Creating new simple http camera video source");
                         videoSource = new SimpleHttpVideoSource(this, videoSourceSettings.hostname, videoSourceSettings.framerate);
                         videoSource.preview();
+                        updateVideoStatus(VideoStatusLive);
                         break;
                     default:
                         throw new ArgumentException();
@@ -387,7 +645,7 @@ namespace video_takeoff_control
             Process.Start("explorer.exe", settings.storageFolderPath);
         }
 
-        private void openLoadVideo_Click(object sender, RoutedEventArgs e)
+        private async void openLoadVideo_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = settings.storageFolderPath;
@@ -398,27 +656,44 @@ namespace video_takeoff_control
             {
                 string filepath = openFileDialog.FileName;
 
-                List<Bitmap> videoFrameBitmampList = videoFileHandler.loadVideo(filepath);
-                List<BitmapImage> loadedVideo = videoFrameBitmampList.Select(x => BitmapConversions.bitmap2BitmapImage(x)).ToList();
+                string previousStatus = textVideoStatus?.Text ?? (videoSource != null ? VideoStatusLive : VideoStatusNoSource);
+                updateVideoStatus(VideoStatusLoading);
+                updateLoadingVideoOverlay(true);
 
-                if (loadedVideo != null)
+                try
                 {
-                    recordedVideo = loadedVideo;
-                    frameCounter = recordedVideo.Count - 1;
-                    updateFrameProgress();
-                    Dispatcher.BeginInvoke(new Action(() => image.Source = recordedVideo[frameCounter]));
+                    List<Bitmap> videoFrameBitmampList = await Task.Run(() => videoFileHandler.loadVideo(filepath));
+                    List<BitmapImage> loadedVideo = videoFrameBitmampList.Select(x => BitmapConversions.bitmap2BitmapImage(x)).ToList();
 
-                    comboActiveVideoSource.IsEnabled = false;
-                    comboRecordingTimer.IsEnabled = false;
+                    if (loadedVideo != null && loadedVideo.Count > 0)
+                    {
+                        recordedVideo = loadedVideo;
+                        frameCounter = recordedVideo.Count - 1;
+                        updateFrameProgress();
+                        updateVideoStatus(VideoStatusFile);
+                        image.Source = recordedVideo[frameCounter];
 
-                    videoSource.stopRecording();
-                    buttonBack.IsEnabled = true;
-                    buttonForward.IsEnabled = true;
-                    buttonStopRecord.IsEnabled = false;
-                    buttonStartRecord.IsEnabled = true;
-                    buttonStartRecord.IsDefault = true;
-                    buttonClear.IsEnabled = true;
-                    editCompetitioNameButton.IsEnabled = true;
+                        comboActiveVideoSource.IsEnabled = false;
+                        comboRecordingTimer.IsEnabled = false;
+
+                        videoSource?.stopRecording();
+                        buttonBack.IsEnabled = true;
+                        buttonForward.IsEnabled = true;
+                        buttonStopRecord.IsEnabled = false;
+                        buttonStartRecord.IsEnabled = videoSource != null;
+                        buttonStartRecord.IsDefault = true;
+                        buttonClear.IsEnabled = true;
+                        editCompetitioNameButton.IsEnabled = true;
+                    }
+                    else
+                    {
+                        MainWindow.GetLogger().Log(LogLevel.Warning, $"Video file did not contain readable frames: {filepath}");
+                        updateVideoStatus(previousStatus);
+                    }
+                }
+                finally
+                {
+                    updateLoadingVideoOverlay(false);
                 }
             }
         }

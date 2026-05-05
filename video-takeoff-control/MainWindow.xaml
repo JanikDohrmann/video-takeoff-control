@@ -1,13 +1,188 @@
-﻿<Window x:Class="video_takeoff_control.MainWindow"
+<Window x:Class="video_takeoff_control.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:video_takeoff_control"
         mc:Ignorable="d"
-        Title="{DynamicResource Common_ApplicationTitle}" Height="450" Width="800" Icon="/vtc_icon.jpg">
-    <DockPanel LastChildFill="True"  Background="LightGray">
-        <Menu DockPanel.Dock="Top" Name="menuProgram"  Background="LightGray">
+        Title="{DynamicResource Common_ApplicationTitle}"
+        Height="760"
+        Width="1280"
+        MinHeight="640"
+        MinWidth="760"
+        Icon="/vtc_icon.jpg"
+        Background="#16181C">
+    <Window.Resources>
+        <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#22262C"/>
+        <SolidColorBrush x:Key="ToolbarBorderBrush" Color="#343A43"/>
+        <SolidColorBrush x:Key="ViewerBackgroundBrush" Color="#16181C"/>
+        <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#22262C"/>
+        <SolidColorBrush x:Key="PanelBorderBrush" Color="#343A43"/>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#0F6CBD"/>
+        <SolidColorBrush x:Key="PrimaryHoverBrush" Color="#115EA3"/>
+        <SolidColorBrush x:Key="DangerBrush" Color="#C50F1F"/>
+        <SolidColorBrush x:Key="DangerHoverBrush" Color="#A4262C"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#F8FAFC"/>
+        <SolidColorBrush x:Key="MutedTextBrush" Color="#CBD5E1"/>
+        <SolidColorBrush x:Key="LightTextBrush" Color="#F8FAFC"/>
+        <SolidColorBrush x:Key="InputTextBrush" Color="#111827"/>
+        <SolidColorBrush x:Key="InputBackgroundBrush" Color="#F8FAFC"/>
+        <SolidColorBrush x:Key="ButtonBorderBrush" Color="#47515F"/>
+
+        <Style x:Key="ToolbarLabelStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+        </Style>
+
+        <Style x:Key="ToolbarTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrush}"/>
+            <Setter Property="Background" Value="#15191F"/>
+            <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+
+        <Style x:Key="ToolbarComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="6,0"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrush}"/>
+            <Setter Property="Background" Value="{StaticResource InputBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource InputTextBrush}"/>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="{StaticResource InputBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource InputTextBrush}"/>
+        </Style>
+
+        <Style TargetType="MenuItem">
+            <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="Role" Value="SubmenuItem">
+                    <Setter Property="Foreground" Value="{StaticResource InputTextBrush}"/>
+                    <Setter Property="Background" Value="{StaticResource InputBackgroundBrush}"/>
+                </Trigger>
+                <Trigger Property="Role" Value="TopLevelHeader">
+                    <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+                    <Setter Property="Background" Value="{StaticResource ToolbarBackgroundBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ToolbarButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="MinWidth" Value="86"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrush}"/>
+            <Setter Property="Background" Value="#2D333B"/>
+            <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
+
+        <Style x:Key="IconButtonStyle" TargetType="Button" BasedOn="{StaticResource ToolbarButtonStyle}">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="MinWidth" Value="40"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ToolbarButtonStyle}">
+            <Setter Property="MinWidth" Value="40"/>
+            <Setter Property="Width" Value="44"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource ToolbarButtonStyle}">
+            <Setter Property="MinWidth" Value="40"/>
+            <Setter Property="Width" Value="44"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Background" Value="{StaticResource DangerBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DangerBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="TransportButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="52"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Margin" Value="6,0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#2D333B"/>
+            <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PanelBorderBrush}"/>
+        </Style>
+
+        <Style x:Key="IconPathStyle" TargetType="Path">
+            <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+        </Style>
+
+        <Style x:Key="DrawerHeaderStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="DrawerSectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,18,0,8"/>
+        </Style>
+
+        <Style x:Key="DrawerLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style x:Key="DrawerTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrush}"/>
+            <Setter Property="Background" Value="{StaticResource InputBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource InputTextBrush}"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+
+        <Style x:Key="DrawerCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="0,8,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0"
+              Grid.Column="0"
+              Name="menuProgram"
+              Background="{StaticResource ToolbarBackgroundBrush}"
+              Foreground="{StaticResource LightTextBrush}"
+              BorderBrush="{StaticResource ToolbarBorderBrush}"
+              BorderThickness="0,0,0,1">
             <MenuItem Header="{DynamicResource Menu_File}" Focusable="False">
                 <MenuItem Header="{DynamicResource Menu_File_Options}" Click="openOptionsMenu_Click" Focusable="False"/>
                 <MenuItem Header="{DynamicResource Menu_File_Close}" Click="close_Click" Focusable="False"/>
@@ -16,76 +191,469 @@
                 <MenuItem Header="{DynamicResource Menu_Help_About}" Click="openAboutWindow_Click" Focusable="False"/>
             </MenuItem>
         </Menu>
-        <WrapPanel DockPanel.Dock="Top">
-            <WrapPanel Name="panelCompetitionInfo" Margin="5" Background="LightGray">
-                <TextBlock Text="{DynamicResource CompetitionDetails_CompetitioName}" Margin="8,0,5,0"/>
-                <TextBox Name="textCompetitionName" Text="{DynamicResource CompetitionDetails_CompetitioName_DefaultText}" Width="200" Margin="5,0,5,0" IsEnabled="False"/>
-                <Button x:Name="editCompetitioNameButton" Content="{DynamicResource CompetitionDetails_CompetitioName_Edit}" Click="openCompetitionModal_Click" Focusable="False"/>
-            </WrapPanel>
-            <WrapPanel Margin="5">
-                <TextBlock Text="{DynamicResource Menu_ActiveCamera}" />
-                <ComboBox Name="comboActiveVideoSource" Width="200" SelectionChanged="comboActiveVideoSource_Selected" Margin="5,0,5,0"  SelectedValuePath="Content" Focusable="False">
-                    
-                </ComboBox>
-            </WrapPanel>
-            <WrapPanel Margin="5">
-                <TextBlock Text="{DynamicResource Menu_RecordingTimer}" />
-                <ComboBox Name="comboRecordingTimer" Width="50" Margin="5,0,5,0"  SelectedValuePath="Content" Focusable="False">
-                    <ComboBoxItem>-</ComboBoxItem>
-                    <ComboBoxItem>5s</ComboBoxItem>
-                    <ComboBoxItem>8s</ComboBoxItem>
-                    <ComboBoxItem>11s</ComboBoxItem>
-                    <ComboBoxItem>13s</ComboBoxItem>
-                </ComboBox>
-            </WrapPanel>
-            <WrapPanel Margin="5">
-                <Button Name="buttonOpenVideoFolder" Content="{DynamicResource Menu_OpenVideoFolder}" Click="openVideoFolder_Click" Focusable="False"/>
-                <Button Name="buttonLoadVideo" Content="{DynamicResource Menu_LoadVideo}" Click="openLoadVideo_Click" Margin="5,0,0,0" Focusable="False"/>
-            </WrapPanel>
-        </WrapPanel>
-        
-        
-        <Grid DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Margin="0,10,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="200*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Image Grid.Row="0" Name="image" Grid.RowSpan="1"/>
 
-            <ProgressBar Grid.Row="1" Height="20" Name="framePogress" Minimum="0" Maximum="100" Margin="0,10,0,10"></ProgressBar>
+        <Border Grid.Row="1"
+                Grid.Column="0"
+                Background="{StaticResource ToolbarBackgroundBrush}"
+                BorderBrush="{StaticResource ToolbarBorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="10,8">
+            <WrapPanel Orientation="Horizontal"
+                       VerticalAlignment="Center"
+                       ItemHeight="34">
 
-            <Grid Grid.Row="2" Margin="0,10,0,10">
+                <StackPanel Name="panelCompetitionInfo"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="0,0,14,6">
+                    <TextBlock Text="{DynamicResource CompetitionDetails_CompetitioName}"
+                               Style="{StaticResource ToolbarLabelStyle}"/>
+                    <TextBox Name="textCompetitionName"
+                             Text="{DynamicResource CompetitionDetails_CompetitioName_DefaultText}"
+                             Width="220"
+                             IsEnabled="False"
+                             Style="{StaticResource ToolbarTextBoxStyle}"/>
+                    <Button x:Name="editCompetitioNameButton"
+                            Click="openCompetitionModal_Click"
+                            ToolTip="{DynamicResource CompetitionDetails_CompetitioName_Edit}"
+                            Style="{StaticResource IconButtonStyle}">
+                        <Viewbox Width="14" Height="14">
+                            <Canvas Width="8" Height="8">
+                                <Path Data="M6 0l-1 1 2 2 1-1-2-2zm-2 2l-4 4v2h2l4-4-2-2z"
+                                      Style="{StaticResource IconPathStyle}"/>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="0,0,14,6">
+                    <TextBlock Text="{DynamicResource Menu_ActiveCamera}"
+                               Style="{StaticResource ToolbarLabelStyle}"/>
+                    <ComboBox Name="comboActiveVideoSource"
+                              Width="240"
+                              SelectionChanged="comboActiveVideoSource_Selected"
+                              SelectedValuePath="Content"
+                              Focusable="False"
+                              Style="{StaticResource ToolbarComboBoxStyle}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="0,0,14,6">
+                    <TextBlock Text="{DynamicResource Menu_RecordingTimer}"
+                               Style="{StaticResource ToolbarLabelStyle}"/>
+                    <ComboBox Name="comboRecordingTimer"
+                              Width="72"
+                              SelectedValuePath="Content"
+                              Focusable="False"
+                              Style="{StaticResource ToolbarComboBoxStyle}">
+                        <ComboBoxItem>-</ComboBoxItem>
+                        <ComboBoxItem>3s</ComboBoxItem>
+                        <ComboBoxItem>5s</ComboBoxItem>
+                        <ComboBoxItem>8s</ComboBoxItem>
+                        <ComboBoxItem>11s</ComboBoxItem>
+                        <ComboBoxItem>13s</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="0,0,14,6">
+                    <Button Name="buttonOpenVideoFolder"
+                            Click="openVideoFolder_Click"
+                            ToolTip="{DynamicResource Menu_OpenVideoFolder}"
+                            Style="{StaticResource IconButtonStyle}">
+                        <Viewbox Width="14" Height="14">
+                            <Canvas Width="8" Height="8">
+                                <Path Data="M0 0v2h8v-1h-5v-1h-3zm0 3v4.5c0 .28.22.5.5.5h7c.28 0 .5-.22.5-.5v-4.5h-8z"
+                                      Style="{StaticResource IconPathStyle}"/>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                    <Button Name="buttonLoadVideo"
+                            Click="openLoadVideo_Click"
+                            ToolTip="{DynamicResource Menu_LoadVideo}"
+                            Style="{StaticResource IconButtonStyle}">
+                        <Viewbox Width="14" Height="14">
+                            <Canvas Width="8" Height="8">
+                                <Path Data="M.5 0c-.28 0-.5.23-.5.5v4c0 .28.23.5.5.5h5c.28 0 .5-.22.5-.5v-1.5l1 1h1v-3h-1l-1 1v-1.5c0-.28-.22-.5-.5-.5h-5z"
+                                      Style="{StaticResource IconPathStyle}">
+                                    <Path.RenderTransform>
+                                        <TranslateTransform Y="1"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="0,0,0,6">
+                    <Button Name="buttonStartRecord"
+                            Click="StartButton_Click"
+                            IsDefault="True"
+                            ToolTip="{DynamicResource VideoControls_StartRecording}"
+                            Style="{StaticResource PrimaryButtonStyle}">
+                        <Viewbox Width="14" Height="14">
+                            <Canvas Width="8" Height="8">
+                                <Path Data="M0 0v6l6-3-6-3z"
+                                      Style="{StaticResource IconPathStyle}">
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="1" Y="1"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                    <Button Name="buttonStopRecord"
+                            Click="StopButton_Click"
+                            ToolTip="{DynamicResource VideoControls_StopRecording}"
+                            Style="{StaticResource DangerButtonStyle}">
+                        <Viewbox Width="14" Height="14">
+                            <Canvas Width="8" Height="8">
+                                <Path Data="M0 0v6h6v-6h-6z"
+                                      Style="{StaticResource IconPathStyle}">
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="1" Y="1"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                    <Button Name="buttonClear"
+                            Click="ClearButton_Click"
+                            ToolTip="{DynamicResource VideoControls_ClearRecording}"
+                            Style="{StaticResource IconButtonStyle}">
+                        <Viewbox Width="14" Height="14">
+                            <Canvas Width="8" Height="8">
+                                <Path Data="M4 0c-2.2 0-4 1.8-4 4s1.8 4 4 4c1.1 0 2.12-.43 2.84-1.16l-.72-.72c-.54.54-1.29.88-2.13.88-1.66 0-3-1.34-3-3s1.34-3 3-3c.83 0 1.55.36 2.09.91l-1.09 1.09h3v-3l-1.19 1.19c-.72-.72-1.71-1.19-2.81-1.19z"
+                                      Style="{StaticResource IconPathStyle}"/>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                    <Button Name="buttonSettingsDrawer"
+                            Click="openOptionsMenu_Click"
+                            ToolTip="{DynamicResource Menu_File_Options}"
+                            Style="{StaticResource IconButtonStyle}">
+                        <Viewbox Width="15" Height="15">
+                            <Canvas Width="8" Height="8">
+                                <Path Data="M3 0l-.5 1.19c-.18.07-.35.15-.5.25l-1.28-.5-.72 1.25 1.03.78c-.02.17-.03.35-.03.53s.01.36.03.53l-1.03.78.72 1.25 1.28-.5c.15.1.32.18.5.25l.5 1.19h1.5l.5-1.19c.18-.07.35-.15.5-.25l1.28.5.72-1.25-1.03-.78c.02-.17.03-.35.03-.53s-.01-.36-.03-.53l1.03-.78-.72-1.25-1.28.5c-.15-.1-.32-.18-.5-.25l-.5-1.19h-1.5zm.75 2c.97 0 1.75.78 1.75 1.75s-.78 1.75-1.75 1.75-1.75-.78-1.75-1.75.78-1.75 1.75-1.75z"
+                                      Style="{StaticResource IconPathStyle}"/>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                </StackPanel>
+            </WrapPanel>
+        </Border>
+
+        <Grid Grid.Row="2"
+              Grid.Column="0"
+              Background="{StaticResource ViewerBackgroundBrush}"
+              ClipToBounds="True">
+            <Border Margin="18"
+                    Background="#0F1115"
+                    BorderBrush="{StaticResource PanelBorderBrush}"
+                    BorderThickness="1">
+                <Grid>
+                    <Image Name="image"
+                           Stretch="Uniform"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           SnapsToDevicePixels="True"/>
+                    <Border HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Margin="14"
+                            Padding="8,4"
+                            Background="#B316181C"
+                            CornerRadius="2">
+                        <TextBlock Name="textVideoStatus"
+                                   Text="NO SOURCE"
+                                   Foreground="{StaticResource LightTextBrush}"
+                                   FontWeight="SemiBold"
+                                   FontSize="12"/>
+                    </Border>
+                    <Border Name="loadingVideoOverlay"
+                            Visibility="Collapsed"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="#99000000">
+                        <Grid>
+                            <Border HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="#E622262C"
+                                    BorderBrush="{StaticResource PanelBorderBrush}"
+                                    BorderThickness="1"
+                                    Padding="22,16"
+                                    CornerRadius="2">
+                                <StackPanel Orientation="Horizontal">
+                                    <ProgressBar Width="88"
+                                                 Height="10"
+                                                 IsIndeterminate="True"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,14,0"/>
+                                    <TextBlock Text="Loading video..."
+                                               Foreground="{StaticResource LightTextBrush}"
+                                               FontWeight="SemiBold"
+                                               FontSize="14"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="3"
+                Grid.Column="0"
+                Background="{StaticResource PanelBackgroundBrush}"
+                BorderBrush="{StaticResource PanelBorderBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="18,12">
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Button Name="buttonBack" Content="{DynamicResource VideoControls_MoveBack}" Grid.Column="0" Width="100" Height="30" Click="BackwardButton_Click"/>
-                <Button Name="buttonForward" Content="{DynamicResource VideoControls_MoveForward}" Grid.Column="1" Width="100" Height="30" Click="ForwardButton_Click">
+
+                <Button Name="buttonBack"
+                        Grid.Column="0"
+                        Click="BackwardButton_Click"
+                        ToolTip="{DynamicResource VideoControls_MoveBack}"
+                        Style="{StaticResource TransportButtonStyle}">
+                    <Viewbox Width="16" Height="16">
+                        <Canvas Width="8" Height="8">
+                            <Path Data="M0 0v6h2v-6h-2zm2 3l5 3v-6l-5 3z"
+                                  Style="{StaticResource IconPathStyle}">
+                                <Path.RenderTransform>
+                                    <TranslateTransform Y="1"/>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+
+                <ProgressBar Grid.Column="1"
+                             Height="10"
+                             Name="framePogress"
+                             Minimum="0"
+                             Maximum="100"
+                             VerticalAlignment="Center"
+                             Margin="12,0"/>
+
+                <Button Name="buttonForward"
+                        Grid.Column="2"
+                        Click="ForwardButton_Click"
+                        ToolTip="{DynamicResource VideoControls_MoveForward}"
+                        Style="{StaticResource TransportButtonStyle}">
+                    <Viewbox Width="16" Height="16">
+                        <Canvas Width="8" Height="8">
+                            <Path Data="M0 0v6l5-3-5-3zm5 3v3h2v-6h-2v3z"
+                                  Style="{StaticResource IconPathStyle}">
+                                <Path.RenderTransform>
+                                    <TranslateTransform Y="1"/>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Canvas>
+                    </Viewbox>
                 </Button>
             </Grid>
+        </Border>
 
-            <Grid Grid.Column="1" Margin="10,0,10,0" VerticalAlignment="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Button Name="buttonStartRecord" Content="{DynamicResource VideoControls_StartRecording}" Grid.Row="0" Width="80" Height="30" Click="StartButton_Click" Margin="0,10,0,10" IsDefault="True"/>
-                <Button Name="buttonStopRecord" Content="{DynamicResource VideoControls_StopRecording}" Grid.Row="1" Width="80" Height="30" Click="StopButton_Click" Margin="0,10,0,10"/>
-                <Button Name="buttonClear" Content="{DynamicResource VideoControls_ClearRecording}" Grid.Row="2" Width="80" Height="30" Click="ClearButton_Click" Margin="0,10,0,10"/>
-            </Grid>
-        </Grid>
-    </DockPanel>
+        <Border Name="settingsDrawer"
+                Grid.Row="0"
+                Grid.Column="1"
+                Grid.RowSpan="4"
+                Width="360"
+                Visibility="Collapsed"
+                Background="{StaticResource PanelBackgroundBrush}"
+                BorderBrush="{StaticResource PanelBorderBrush}"
+                BorderThickness="1,0,0,0">
+            <DockPanel LastChildFill="True">
+                <Grid DockPanel.Dock="Top"
+                      Margin="18,16,18,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="{DynamicResource OptionsMenu_WindowTitle}"
+                               Style="{StaticResource DrawerHeaderStyle}"/>
+                    <Button Grid.Column="1"
+                            Name="buttonCloseSettingsDrawer"
+                            Click="closeSettingsDrawer_Click"
+                            ToolTip="Schliessen"
+                            Style="{StaticResource IconButtonStyle}">
+                        <Viewbox Width="13" Height="13">
+                            <Canvas Width="8" Height="8">
+                                <Path Data="M1.41 0l-1.41 1.41 2.59 2.59-2.59 2.59 1.41 1.41 2.59-2.59 2.59 2.59 1.41-1.41-2.59-2.59 2.59-2.59-1.41-1.41-2.59 2.59-2.59-2.59z"
+                                      Style="{StaticResource IconPathStyle}"/>
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                </Grid>
 
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="18,0,18,18">
+                        <TextBlock Text="{DynamicResource OptionsMenu_Common_Header}"
+                                   Style="{StaticResource DrawerSectionHeaderStyle}"/>
+                        <TextBlock Text="{DynamicResource OptionsMenu_Common_LanguageHeader}"
+                                   Style="{StaticResource DrawerLabelStyle}"/>
+                        <ComboBox Name="comboDrawerLanguage"
+                                  SelectedValuePath="Content"
+                                  Style="{StaticResource ToolbarComboBoxStyle}">
+                            <ComboBoxItem Content="en-UK"/>
+                            <ComboBoxItem Content="de-DE"/>
+                        </ComboBox>
+                        <Button Name="buttonDrawerSaveCommon"
+                                Content="{DynamicResource Common_Save}"
+                                Click="SaveDrawerCommon_Click"
+                                HorizontalAlignment="Right"
+                                Margin="0,10,0,0"
+                                Style="{StaticResource ToolbarButtonStyle}"/>
+
+                        <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_Header}"
+                                   Style="{StaticResource DrawerSectionHeaderStyle}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_VerticalPositionHeader}"
+                                           Style="{StaticResource DrawerLabelStyle}"/>
+                                <TextBox Name="textDrawerVerticalControlLinePosition"
+                                         TextAlignment="Center"
+                                         Style="{StaticResource DrawerTextBoxStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_HorizontalPositionHeader}"
+                                           Style="{StaticResource DrawerLabelStyle}"/>
+                                <TextBox Name="textDrawerHorizontalControlLinePosition"
+                                         TextAlignment="Center"
+                                         Style="{StaticResource DrawerTextBoxStyle}"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_WidthHeader}"
+                                           Style="{StaticResource DrawerLabelStyle}"/>
+                                <TextBox Name="textDrawerControlLineWidth"
+                                         TextAlignment="Center"
+                                         Style="{StaticResource DrawerTextBoxStyle}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="{DynamicResource OptionsMenu_ControlLine_ColourHeader}"
+                                           Style="{StaticResource DrawerLabelStyle}"/>
+                                <ComboBox Name="comboDrawerControlLineColor"
+                                          Style="{StaticResource ToolbarComboBoxStyle}"/>
+                            </StackPanel>
+                        </Grid>
+                        <CheckBox Name="checkDrawerCenterControlLine"
+                                  Content="{DynamicResource OptionsMenu_ControlLine_CenterControlLine}"
+                                  Style="{StaticResource DrawerCheckBoxStyle}"/>
+                        <CheckBox Name="checkDrawerShowVerticalControlLine"
+                                  Content="{DynamicResource OptionsMenu_ControlLine_ShowVerticalLineHeader}"
+                                  Style="{StaticResource DrawerCheckBoxStyle}"/>
+                        <CheckBox Name="checkDrawerShowHorizontalControlLine"
+                                  Content="{DynamicResource OptionsMenu_ControlLine_ShowHorizontalLineHeader}"
+                                  Style="{StaticResource DrawerCheckBoxStyle}"/>
+                        <Button Name="buttonDrawerSaveControlLine"
+                                Content="{DynamicResource Common_Save}"
+                                Click="SaveDrawerControlLine_Click"
+                                HorizontalAlignment="Right"
+                                Margin="0,10,0,0"
+                                Style="{StaticResource ToolbarButtonStyle}"/>
+
+                        <TextBlock Text="{DynamicResource OptionsMenu_VideoStorage_Header}"
+                                   Style="{StaticResource DrawerSectionHeaderStyle}"/>
+                        <TextBlock Text="{DynamicResource OptionsMenu_VideoStorage_PathHeader}"
+                                   Style="{StaticResource DrawerLabelStyle}"/>
+                        <TextBox Name="textDrawerVideoStoragePath"
+                                 Style="{StaticResource DrawerTextBoxStyle}"/>
+                        <Button Name="buttonDrawerSaveVideoStorage"
+                                Content="{DynamicResource Common_Save}"
+                                Click="SaveDrawerVideoStorage_Click"
+                                HorizontalAlignment="Right"
+                                Margin="0,10,0,0"
+                                Style="{StaticResource ToolbarButtonStyle}"/>
+
+                        <TextBlock Text="{DynamicResource OptionsMenu_VideoSorce_Header}"
+                                   Style="{StaticResource DrawerSectionHeaderStyle}"/>
+                        <WrapPanel Margin="0,0,0,8">
+                            <Button Name="buttonDrawerAddVideoSource"
+                                    Content="{DynamicResource Common_Add}"
+                                    Click="AddDrawerVideoSource_Click"
+                                    Style="{StaticResource ToolbarButtonStyle}"
+                                    Margin="0,0,6,6"/>
+                            <Button Name="buttonDrawerEditVideoSource"
+                                    Content="{DynamicResource Common_Edit}"
+                                    Click="EditDrawerVideoSource_Click"
+                                    Style="{StaticResource ToolbarButtonStyle}"
+                                    Margin="0,0,6,6"/>
+                            <Button Name="buttonDrawerRemoveVideoSource"
+                                    Content="{DynamicResource Common_Remove}"
+                                    Click="RemoveDrawerVideoSource_Click"
+                                    Style="{StaticResource ToolbarButtonStyle}"
+                                    Margin="0,0,6,6"/>
+                        </WrapPanel>
+                        <ListView Name="listDrawerVideoSources"
+                                  MinHeight="140"
+                                  MaxHeight="240"
+                                  Background="#15191F"
+                                  BorderBrush="{StaticResource ButtonBorderBrush}"
+                                  Foreground="{StaticResource LightTextBrush}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Foreground" Value="{StaticResource LightTextBrush}"/>
+                                    <Setter Property="Background" Value="#15191F"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="4,6">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding name}"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource LightTextBrush}"/>
+                                            <TextBlock Text="{Binding hostname}"
+                                                       FontSize="11"
+                                                       Foreground="{StaticResource MutedTextBrush}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding videoSourceType}"
+                                                   FontSize="11"
+                                                   Foreground="{StaticResource MutedTextBrush}"
+                                                   VerticalAlignment="Top"
+                                                   Margin="8,1,0,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Button Name="buttonDrawerSaveVideoSources"
+                                Content="{DynamicResource Common_Save}"
+                                Click="SaveDrawerVideoSources_Click"
+                                HorizontalAlignment="Right"
+                                Margin="0,10,0,0"
+                                Style="{StaticResource ToolbarButtonStyle}"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+    </Grid>
 </Window>

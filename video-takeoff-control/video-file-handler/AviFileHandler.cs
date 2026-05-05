@@ -23,6 +23,12 @@ namespace video_takeoff_control.video_file_handler
         {
             try
             {
+                if (frames == null || frames.Count == 0)
+                {
+                    MainWindow.GetLogger().Log(logging.LogLevel.Warning, "No frames supplied. Video file was not written.");
+                    return;
+                }
+
                 string storageFolder = Path.Combine(settings.storageFolderPath, settings.competitionName);
                 if(!Directory.Exists(storageFolder))
                 {
